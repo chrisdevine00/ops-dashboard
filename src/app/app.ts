@@ -325,7 +325,7 @@ export class App implements OnInit, OnDestroy {
             const displayHour = (7 + hours) % 24;
             const timeStr = `${displayHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
             const severityColor = alert.severity === 'extended' ? BD_AURORA_LIGHT :
-                                  alert.severity === 'warning' ? BD_AURORA : '#333';
+                                  alert.severity === 'warning' ? BD_AURORA : '#AAAAAA';
             return `
               <div style="min-width: 180px;">
                 <strong>Alert</strong><br/>
@@ -737,7 +737,7 @@ export class App implements OnInit, OnDestroy {
             const alert = params.data.alert;
             const timeStr = formatTimeFn(params.value[0]);
             const severityColor = alert.severity === 'extended' ? BD_AURORA_LIGHT :
-                                  alert.severity === 'warning' ? BD_AURORA : '#333';
+                                  alert.severity === 'warning' ? BD_AURORA : '#AAAAAA';
             return `
               <div style="min-width: 200px;">
                 <strong>Alert</strong><br/>
