@@ -1,0 +1,122 @@
+// ============================================
+// BD Dashboard - Main Variables
+// Imports BD brand tokens and defines utility variables
+// ============================================
+
+@use './tokens/bd-primitives' as bd;
+@use './tokens/bd-semantic' as semantic;
+@use './tokens/bd-component' as component;
+
+// ============================================
+// Brand Colors (for direct access)
+// ============================================
+$brand-primary: bd.$bd-blue-500;
+$brand-primary-light: bd.$bd-blue-400;
+$brand-primary-dark: bd.$bd-blue-600;
+
+$brand-accent: bd.$bd-orange-500;
+$brand-accent-light: bd.$bd-orange-400;
+$brand-accent-dark: bd.$bd-orange-600;
+
+$brand-warn: bd.$bd-error;
+$brand-success: bd.$bd-success;
+$brand-info: bd.$bd-info;
+
+// ============================================
+// Background Colors
+// ============================================
+$background-primary: component.$background-primary;
+$background-secondary: component.$background-secondary;
+$background-card: component.$card-bg;
+$background-hover: semantic.$color-overlay-hover;
+
+// ============================================
+// Text Colors
+// ============================================
+$text-primary: semantic.$color-text-primary;
+$text-secondary: semantic.$color-text-secondary;
+$text-tertiary: semantic.$color-text-tertiary;
+$text-disabled: semantic.$color-text-disabled;
+$text-inverse: semantic.$color-text-inverse;
+
+// ============================================
+// Neutral/Gray Scale
+// ============================================
+$gray-50: bd.$bd-warm-gray-50;
+$gray-100: bd.$bd-warm-gray-100;
+$gray-200: bd.$bd-warm-gray-200;
+$gray-300: bd.$bd-warm-gray-300;
+$gray-400: bd.$bd-warm-gray-400;
+$gray-500: bd.$bd-warm-gray-500;
+$gray-600: bd.$bd-warm-gray-600;
+$gray-700: bd.$bd-warm-gray-700;
+$gray-800: bd.$bd-warm-gray-800;
+$gray-900: bd.$bd-warm-gray-900;
+
+// ============================================
+// Spacing Scale (based on 4px base unit)
+// ============================================
+$spacing-0: 0;
+$spacing-1: 0.25rem;   // 4px
+$spacing-2: 0.5rem;    // 8px
+$spacing-3: 0.75rem;   // 12px
+$spacing-4: 1rem;      // 16px
+$spacing-5: 1.25rem;   // 20px
+$spacing-6: 1.5rem;    // 24px
+$spacing-8: 2rem;      // 32px
+$spacing-10: 2.5rem;   // 40px
+$spacing-12: 3rem;     // 48px
+$spacing-16: 4rem;     // 64px
+
+// ============================================
+// Border Radius
+// ============================================
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+$border-radius-full: 9999px;
+
+// ============================================
+// Shadows (Material elevation)
+// ============================================
+$shadow-sm: 0 1px 3px semantic.$color-shadow-sm;
+$shadow-md: 0 4px 6px semantic.$color-shadow-md;
+$shadow-lg: 0 10px 15px semantic.$color-shadow-lg;
+$shadow-xl: 0 20px 25px semantic.$color-shadow-xl;
+
+// ============================================
+// Component Sizes
+// ============================================
+$toolbar-height: 64px;
+$sidebar-width: 260px;
+$sidebar-collapsed-width: 64px;
+$card-padding: $spacing-6;
+$form-field-height: 56px;
+
+// ============================================
+// Breakpoints (matching Material defaults)
+// ============================================
+$breakpoint-xs: 0;
+$breakpoint-sm: 600px;
+$breakpoint-md: 960px;
+$breakpoint-lg: 1280px;
+$breakpoint-xl: 1920px;
+
+// ============================================
+// Z-index layers
+// ============================================
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+
+// ============================================
+// Transitions
+// ============================================
+$transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);

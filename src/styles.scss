@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+
+// Import theme files
+@use './styles/theme';
+@use './styles/typography';
+@use './styles/variables' as vars;
+
+// Global styles
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+// Utility classes
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

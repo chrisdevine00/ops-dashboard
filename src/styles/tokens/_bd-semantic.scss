@@ -1,0 +1,132 @@
+// ============================================
+// BD Brand Colors - Semantic Tokens
+// Purpose-based color assignments
+// ============================================
+
+@use './bd-primitives' as bd;
+
+// ============================================
+// Brand Colors
+// ============================================
+$color-brand-primary: bd.$bd-blue-500;
+$color-brand-primary-light: bd.$bd-blue-400;
+$color-brand-primary-dark: bd.$bd-blue-600;
+$color-brand-primary-subtle: bd.$bd-blue-50;
+
+$color-brand-accent: bd.$bd-orange-500;
+$color-brand-accent-light: bd.$bd-orange-400;
+$color-brand-accent-dark: bd.$bd-orange-600;
+$color-brand-accent-subtle: bd.$bd-orange-50;
+
+// ============================================
+// Interactive Colors (buttons, links, etc.)
+// ============================================
+$color-interactive-primary: bd.$bd-blue-500;
+$color-interactive-primary-hover: bd.$bd-blue-600;
+$color-interactive-primary-active: bd.$bd-blue-700;
+$color-interactive-primary-disabled: bd.$bd-blue-300;
+$color-interactive-primary-subtle: bd.$bd-blue-50;
+
+$color-interactive-secondary: bd.$bd-orange-500;
+$color-interactive-secondary-hover: bd.$bd-orange-600;
+$color-interactive-secondary-active: bd.$bd-orange-700;
+$color-interactive-secondary-disabled: bd.$bd-orange-300;
+
+// ============================================
+// Surface Colors (backgrounds, cards, etc.)
+// ============================================
+$color-surface-primary: #FFFFFF;
+$color-surface-secondary: bd.$bd-warm-white;
+$color-surface-tertiary: bd.$bd-warm-gray-50;
+$color-surface-elevated: #FFFFFF;
+$color-surface-overlay: rgba(bd.$bd-deep-blue-500, 0.8);
+
+// ============================================
+// Text Colors
+// ============================================
+$color-text-primary: bd.$bd-deep-blue-500;
+$color-text-secondary: bd.$bd-deep-blue-300;
+$color-text-tertiary: bd.$bd-warm-gray-700;
+$color-text-disabled: bd.$bd-warm-gray-400;
+$color-text-inverse: #FFFFFF;
+$color-text-link: bd.$bd-blue-500;
+$color-text-link-hover: bd.$bd-blue-600;
+
+// ============================================
+// Border & Divider Colors
+// ============================================
+$color-border-default: bd.$bd-warm-gray-300;
+$color-border-subtle: bd.$bd-warm-gray-200;
+$color-border-strong: bd.$bd-warm-gray-500;
+$color-border-primary: bd.$bd-blue-500;
+$color-divider: bd.$bd-warm-gray-200;
+
+// ============================================
+// Status/Feedback Colors
+// ============================================
+// Success (Green)
+$color-success: bd.$bd-success;
+$color-success-hover: darken(bd.$bd-success, 8%);
+$color-success-active: darken(bd.$bd-success, 15%);
+$color-success-subtle: lighten(bd.$bd-success, 40%);
+$color-success-border: bd.$bd-success;
+
+// Warning (Yellow/Orange)
+$color-warning: bd.$bd-warning;
+$color-warning-hover: darken(bd.$bd-warning, 8%);
+$color-warning-active: darken(bd.$bd-warning, 15%);
+$color-warning-subtle: lighten(bd.$bd-warning, 35%);
+$color-warning-border: bd.$bd-warning;
+
+// Error (Red)
+$color-error: bd.$bd-error;
+$color-error-hover: darken(bd.$bd-error, 8%);
+$color-error-active: darken(bd.$bd-error, 15%);
+$color-error-subtle: lighten(bd.$bd-error, 35%);
+$color-error-border: bd.$bd-error;
+
+// Info (Blue)
+$color-info: bd.$bd-info;
+$color-info-hover: darken(bd.$bd-info, 8%);
+$color-info-active: darken(bd.$bd-info, 15%);
+$color-info-subtle: lighten(bd.$bd-info, 40%);
+$color-info-border: bd.$bd-info;
+
+// ============================================
+// Chart Colors (Data Visualization)
+// ============================================
+$color-chart-primary: bd.$bd-blue-500;
+$color-chart-secondary: bd.$bd-orange-500;
+$color-chart-tertiary: bd.$bd-comet;
+$color-chart-quaternary: bd.$bd-aurora;
+$color-chart-quinary: bd.$bd-ultraviolet;
+$color-chart-senary: bd.$bd-nebula;
+$color-chart-septenary: bd.$bd-eclipse;
+
+// Chart color array for series
+$chart-colors: (
+  bd.$bd-blue-500,
+  bd.$bd-orange-500,
+  bd.$bd-comet,
+  bd.$bd-aurora,
+  bd.$bd-ultraviolet,
+  bd.$bd-nebula,
+  bd.$bd-eclipse,
+  bd.$bd-infrared
+);
+
+// ============================================
+// Shadow & Elevation
+// ============================================
+$color-shadow-sm: rgba(bd.$bd-deep-blue-500, 0.08);
+$color-shadow-md: rgba(bd.$bd-deep-blue-500, 0.12);
+$color-shadow-lg: rgba(bd.$bd-deep-blue-500, 0.16);
+$color-shadow-xl: rgba(bd.$bd-deep-blue-500, 0.20);
+
+// ============================================
+// State Overlays (for hover, focus, etc.)
+// ============================================
+$color-overlay-hover: rgba(bd.$bd-blue-500, 0.04);
+$color-overlay-pressed: rgba(bd.$bd-blue-500, 0.08);
+$color-overlay-selected: rgba(bd.$bd-blue-500, 0.12);
+$color-overlay-disabled: rgba(bd.$bd-warm-gray-500, 0.38);

@@ -1,0 +1,149 @@
+// ============================================
+// BD Brand Colors - Component Tokens
+// Component-specific color assignments
+// ============================================
+
+@use './bd-semantic' as semantic;
+
+// ============================================
+// Toolbar / Header
+// ============================================
+$toolbar-bg: semantic.$color-brand-primary;
+$toolbar-text: semantic.$color-text-inverse;
+$toolbar-icon: semantic.$color-text-inverse;
+$toolbar-hover: semantic.$color-interactive-primary-hover;
+$toolbar-shadow: semantic.$color-shadow-md;
+
+// ============================================
+// Navigation / Sidebar
+// ============================================
+$nav-bg: semantic.$color-surface-primary;
+$nav-item-text: semantic.$color-text-primary;
+$nav-item-icon: semantic.$color-text-secondary;
+$nav-item-hover-bg: semantic.$color-overlay-hover;
+$nav-item-active-bg: semantic.$color-interactive-primary-subtle;
+$nav-item-active-text: semantic.$color-interactive-primary;
+$nav-divider: semantic.$color-divider;
+
+// ============================================
+// Cards
+// ============================================
+$card-bg: semantic.$color-surface-primary;
+$card-border: semantic.$color-border-subtle;
+$card-shadow: semantic.$color-shadow-sm;
+$card-shadow-hover: semantic.$color-shadow-md;
+$card-header-text: semantic.$color-text-secondary;
+$card-title-text: semantic.$color-text-primary;
+
+// ============================================
+// Metric Cards (Dashboard)
+// ============================================
+$metric-card-value-color: semantic.$color-brand-primary;
+$metric-card-value-accent: semantic.$color-brand-accent;
+$metric-card-unit-color: semantic.$color-text-tertiary;
+$metric-card-hover-shadow: semantic.$color-shadow-lg;
+
+// ============================================
+// Buttons
+// ============================================
+// Primary Button
+$button-primary-bg: semantic.$color-interactive-primary;
+$button-primary-text: semantic.$color-text-inverse;
+$button-primary-hover: semantic.$color-interactive-primary-hover;
+$button-primary-active: semantic.$color-interactive-primary-active;
+$button-primary-disabled-bg: semantic.$color-interactive-primary-disabled;
+$button-primary-disabled-text: rgba(semantic.$color-text-inverse, 0.5);
+
+// Secondary Button
+$button-secondary-bg: semantic.$color-interactive-secondary;
+$button-secondary-text: semantic.$color-text-inverse;
+$button-secondary-hover: semantic.$color-interactive-secondary-hover;
+$button-secondary-active: semantic.$color-interactive-secondary-active;
+$button-secondary-disabled-bg: semantic.$color-interactive-secondary-disabled;
+
+// Outlined Button
+$button-outlined-border: semantic.$color-border-primary;
+$button-outlined-text: semantic.$color-interactive-primary;
+$button-outlined-hover-bg: semantic.$color-overlay-hover;
+
+// ============================================
+// Form Fields
+// ============================================
+$form-field-bg: semantic.$color-surface-primary;
+$form-field-border: semantic.$color-border-default;
+$form-field-border-hover: semantic.$color-border-strong;
+$form-field-border-focus: semantic.$color-border-primary;
+$form-field-text: semantic.$color-text-primary;
+$form-field-placeholder: semantic.$color-text-tertiary;
+$form-field-label: semantic.$color-text-secondary;
+$form-field-error-border: semantic.$color-error-border;
+$form-field-error-text: semantic.$color-error;
+
+// ============================================
+// Charts
+// ============================================
+$chart-grid-color: rgba(semantic.$color-border-subtle, 0.5);
+$chart-axis-color: semantic.$color-text-tertiary;
+$chart-text-color: semantic.$color-text-primary;
+$chart-tooltip-bg: rgba(semantic.$color-surface-overlay, 0.95);
+$chart-tooltip-text: semantic.$color-text-inverse;
+
+// Chart series colors
+$chart-series-1: semantic.$color-chart-primary;
+$chart-series-2: semantic.$color-chart-secondary;
+$chart-series-3: semantic.$color-chart-tertiary;
+$chart-series-4: semantic.$color-chart-quaternary;
+$chart-series-5: semantic.$color-chart-quinary;
+$chart-series-6: semantic.$color-chart-senary;
+$chart-series-7: semantic.$color-chart-septenary;
+
+// ============================================
+// Status Indicators
+// ============================================
+$status-success-bg: semantic.$color-success-subtle;
+$status-success-text: semantic.$color-success;
+$status-success-border: semantic.$color-success-border;
+
+$status-warning-bg: semantic.$color-warning-subtle;
+$status-warning-text: semantic.$color-warning;
+$status-warning-border: semantic.$color-warning-border;
+
+$status-error-bg: semantic.$color-error-subtle;
+$status-error-text: semantic.$color-error;
+$status-error-border: semantic.$color-error-border;
+
+$status-info-bg: semantic.$color-info-subtle;
+$status-info-text: semantic.$color-info;
+$status-info-border: semantic.$color-info-border;
+
+// ============================================
+// Background Colors
+// ============================================
+$background-primary: semantic.$color-surface-primary;
+$background-secondary: semantic.$color-surface-secondary;
+$background-tertiary: semantic.$color-surface-tertiary;
+$background-elevated: semantic.$color-surface-elevated;
+
+// ============================================
+// Badges / Chips
+// ============================================
+$badge-primary-bg: semantic.$color-brand-primary;
+$badge-primary-text: semantic.$color-text-inverse;
+$badge-secondary-bg: semantic.$color-brand-accent;
+$badge-secondary-text: semantic.$color-text-inverse;
+$badge-neutral-bg: semantic.$color-surface-tertiary;
+$badge-neutral-text: semantic.$color-text-primary;
+
+// ============================================
+// Links
+// ============================================
+$link-text: semantic.$color-text-link;
+$link-hover: semantic.$color-text-link-hover;
+$link-visited: semantic.$color-interactive-primary-active;
+
+// ============================================
+// Scrollbars
+// ============================================
+$scrollbar-track: semantic.$color-surface-tertiary;
+$scrollbar-thumb: semantic.$color-border-strong;
+$scrollbar-thumb-hover: semantic.$color-text-tertiary;

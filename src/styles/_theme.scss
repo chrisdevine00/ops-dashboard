@@ -1,0 +1,112 @@
+// ============================================
+// BD Dashboard - Material Theme
+// Custom Material theme using BD brand colors
+// ============================================
+
+@use '@angular/material' as mat;
+@use './tokens/bd-primitives' as bd;
+
+@include mat.core();
+
+// ============================================
+// BD Custom Material Palettes
+// ============================================
+
+// BD Blue Palette (Primary)
+$bd-blue-palette: (
+  50: bd.$bd-blue-50,
+  100: bd.$bd-blue-100,
+  200: bd.$bd-blue-200,
+  300: bd.$bd-blue-300,
+  400: bd.$bd-blue-400,
+  500: bd.$bd-blue-500,
+  600: bd.$bd-blue-600,
+  700: bd.$bd-blue-700,
+  800: bd.$bd-blue-800,
+  900: bd.$bd-blue-900,
+  contrast: (
+    50: bd.$bd-deep-blue-500,
+    100: bd.$bd-deep-blue-500,
+    200: bd.$bd-deep-blue-500,
+    300: bd.$bd-deep-blue-500,
+    400: #FFFFFF,
+    500: #FFFFFF,
+    600: #FFFFFF,
+    700: #FFFFFF,
+    800: #FFFFFF,
+    900: #FFFFFF,
+  )
+);
+
+// BD Orange Palette (Accent)
+$bd-orange-palette: (
+  50: bd.$bd-orange-50,
+  100: bd.$bd-orange-100,
+  200: bd.$bd-orange-200,
+  300: bd.$bd-orange-300,
+  400: bd.$bd-orange-400,
+  500: bd.$bd-orange-500,
+  600: bd.$bd-orange-600,
+  700: bd.$bd-orange-700,
+  800: bd.$bd-orange-800,
+  900: bd.$bd-orange-900,
+  contrast: (
+    50: bd.$bd-deep-blue-500,
+    100: bd.$bd-deep-blue-500,
+    200: bd.$bd-deep-blue-500,
+    300: bd.$bd-deep-blue-500,
+    400: #FFFFFF,
+    500: #FFFFFF,
+    600: #FFFFFF,
+    700: #FFFFFF,
+    800: #FFFFFF,
+    900: #FFFFFF,
+  )
+);
+
+// BD Infrared Palette (Warn/Error)
+$bd-infrared-palette: (
+  50: lighten(bd.$bd-infrared, 40%),
+  100: lighten(bd.$bd-infrared, 30%),
+  200: lighten(bd.$bd-infrared, 20%),
+  300: lighten(bd.$bd-infrared, 10%),
+  400: lighten(bd.$bd-infrared, 5%),
+  500: bd.$bd-infrared,
+  600: darken(bd.$bd-infrared, 5%),
+  700: darken(bd.$bd-infrared, 10%),
+  800: darken(bd.$bd-infrared, 15%),
+  900: darken(bd.$bd-infrared, 20%),
+  contrast: (
+    50: bd.$bd-deep-blue-500,
+    100: bd.$bd-deep-blue-500,
+    200: bd.$bd-deep-blue-500,
+    300: #FFFFFF,
+    400: #FFFFFF,
+    500: #FFFFFF,
+    600: #FFFFFF,
+    700: #FFFFFF,
+    800: #FFFFFF,
+    900: #FFFFFF,
+  )
+);
+
+// ============================================
+// Create Material Palettes
+// ============================================
+$app-primary: mat.m2-define-palette($bd-blue-palette);
+$app-accent: mat.m2-define-palette($bd-orange-palette);
+$app-warn: mat.m2-define-palette($bd-infrared-palette);
+
+// ============================================
+// Create and Apply Theme
+// ============================================
+$app-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-accent,
+    warn: $app-warn,
+  )
+));
+
+// Include theme styles for all components
+@include mat.all-component-themes($app-theme);

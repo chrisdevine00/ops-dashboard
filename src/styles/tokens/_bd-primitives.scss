@@ -1,0 +1,103 @@
+// ============================================
+// BD Brand Colors - Primitive Tokens
+// Based on BD Color Palette (Becton Dickinson)
+// ============================================
+
+// BD Blue Ramp (Primary Brand Color)
+// Base: #0446ED (BD Boosted Blue)
+$bd-blue-50: #E8EFFE;
+$bd-blue-100: #C4D5FC;
+$bd-blue-200: #9DB9FA;
+$bd-blue-300: #769DF7;
+$bd-blue-400: #5A86F5;
+$bd-blue-500: #0446ED;  // Base color from brand guidelines
+$bd-blue-600: #033ED5;
+$bd-blue-700: #0335BA;
+$bd-blue-800: #022C9F;
+$bd-blue-900: #021E6F;
+
+// BD Orange Ramp (Accent Color)
+// Base: #FF6E00 (BD Boosted Orange)
+$bd-orange-50: #FFF3E5;
+$bd-orange-100: #FFE0BF;
+$bd-orange-200: #FFCC94;
+$bd-orange-300: #FFB769;
+$bd-orange-400: #FFA749;
+$bd-orange-500: #FF6E00;  // Base color from brand guidelines
+$bd-orange-600: #F56600;
+$bd-orange-700: #E65C00;
+$bd-orange-800: #D85200;
+$bd-orange-900: #C04000;
+
+// BD Deep Blue Ramp (Dark Variant)
+// Base: #060A3D (Deep Blue)
+$bd-deep-blue-50: #E5E6EC;
+$bd-deep-blue-100: #BFC1CF;
+$bd-deep-blue-200: #9498B0;
+$bd-deep-blue-300: #696E90;
+$bd-deep-blue-400: #484F78;
+$bd-deep-blue-500: #060A3D;  // Base color from brand guidelines
+$bd-deep-blue-600: #050937;
+$bd-deep-blue-700: #04072F;
+$bd-deep-blue-800: #030527;
+$bd-deep-blue-900: #02031A;
+
+// BD Warm Gray Ramp (Neutral)
+// Base: PMS 427 C
+$bd-warm-gray-50: #F7F6F6;
+$bd-warm-gray-100: #ECEAEA;
+$bd-warm-gray-200: #DFDCDC;
+$bd-warm-gray-300: #D2CECE;
+$bd-warm-gray-400: #C9C3C3;
+$bd-warm-gray-500: #BFB8B8;
+$bd-warm-gray-600: #B9B1B1;
+$bd-warm-gray-700: #B1A8A8;
+$bd-warm-gray-800: #A9A0A0;
+$bd-warm-gray-900: #9B9191;
+
+// BD Warm White
+$bd-warm-white: #F8F4F1;
+
+// BD Secondary Colors (from brand palette)
+// Infrared Family
+$bd-infrared-dark: #EF6860;   // PMS 4058 C approximation
+$bd-infrared: #FF6B61;        // PMS 2346 C approximation
+$bd-infrared-light: #FF8F87;  // PMS 176 C approximation
+
+// Aurora Family
+$bd-aurora-dark: #E65C23;     // PMS 1595 C approximation
+$bd-aurora: #FA7C23;          // PMS 2923 C approximation
+$bd-aurora-light: #FFB84D;    // PMS 162 C approximation
+
+// Eclipse Family
+$bd-eclipse-dark: #F5A500;    // PMS 130 C approximation
+$bd-eclipse: #FFC300;         // PMS 7548 C approximation
+$bd-eclipse-light: #FFD966;   // PMS 2005 C approximation
+
+// Comet Family
+$bd-comet-dark: #0099CC;      // PMS 7461 C approximation
+$bd-comet: #2995C5;           // PMS 2995 C approximation
+$bd-comet-light: #5BB3DB;     // PMS 2975 C approximation
+
+// Nebula Family
+$bd-nebula-dark: #00A88F;     // PMS 3268 C approximation
+$bd-nebula: #00C9A7;          // PMS 3265 C approximation
+$bd-nebula-light: #4DD9C0;    // PMS 7471 C approximation
+
+// Ultraviolet
+$bd-ultraviolet: #9199D8;     // PMS 7446 C
+
+// Bright Blue
+$bd-bright-blue: #1D74FF;     // PMS 2184 C approximation
+
+// Functional Grays (from brand guidelines)
+$bd-gray-dark: #000000;
+$bd-gray-medium: #808080;
+$bd-gray-light: #CCCCCC;
+$bd-gray-lightest: #F0F0F0;
+
+// Status Colors (using BD palette)
+$bd-success: $bd-nebula;         // Green for success
+$bd-warning: $bd-eclipse;         // Yellow for warnings
+$bd-error: $bd-infrared;          // Red for errors
+$bd-info: $bd-comet;              // Blue for info

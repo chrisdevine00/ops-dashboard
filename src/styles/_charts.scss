@@ -1,0 +1,85 @@
+// ============================================
+// BD Dashboard - Chart Color Schemes
+// Data visualization colors using BD brand palette
+// ============================================
+
+@use './tokens/bd-primitives' as bd;
+@use './tokens/bd-semantic' as semantic;
+
+// ============================================
+// Chart Color Palette (Primary series colors)
+// ============================================
+$chart-color-1: bd.$bd-blue-500;          // BD Blue
+$chart-color-2: bd.$bd-orange-500;        // BD Orange
+$chart-color-3: bd.$bd-comet;             // Comet Blue
+$chart-color-4: bd.$bd-aurora;            // Aurora Orange
+$chart-color-5: bd.$bd-ultraviolet;       // Ultraviolet
+$chart-color-6: bd.$bd-nebula;            // Nebula Teal
+$chart-color-7: bd.$bd-eclipse;           // Eclipse Yellow
+$chart-color-8: bd.$bd-infrared;          // Infrared Red
+
+// ============================================
+// Sequential Color Ramps (for heatmaps, gradients)
+// ============================================
+// BD Blue Sequential
+$chart-colors-sequential-blue-1: bd.$bd-blue-50;
+$chart-colors-sequential-blue-2: bd.$bd-blue-100;
+$chart-colors-sequential-blue-3: bd.$bd-blue-200;
+$chart-colors-sequential-blue-4: bd.$bd-blue-300;
+$chart-colors-sequential-blue-5: bd.$bd-blue-400;
+$chart-colors-sequential-blue-6: bd.$bd-blue-500;
+$chart-colors-sequential-blue-7: bd.$bd-blue-600;
+$chart-colors-sequential-blue-8: bd.$bd-blue-700;
+
+// BD Orange Sequential
+$chart-colors-sequential-orange-1: bd.$bd-orange-50;
+$chart-colors-sequential-orange-2: bd.$bd-orange-100;
+$chart-colors-sequential-orange-3: bd.$bd-orange-200;
+$chart-colors-sequential-orange-4: bd.$bd-orange-300;
+$chart-colors-sequential-orange-5: bd.$bd-orange-400;
+$chart-colors-sequential-orange-6: bd.$bd-orange-500;
+$chart-colors-sequential-orange-7: bd.$bd-orange-600;
+$chart-colors-sequential-orange-8: bd.$bd-orange-700;
+
+// ============================================
+// Status/Feedback Colors for Charts
+// ============================================
+$chart-color-success: semantic.$color-success;
+$chart-color-warning: semantic.$color-warning;
+$chart-color-error: semantic.$color-error;
+$chart-color-info: semantic.$color-info;
+
+// ============================================
+// Chart UI Elements
+// ============================================
+$chart-grid-color: rgba(bd.$bd-warm-gray-300, 0.5);
+$chart-axis-color: bd.$bd-warm-gray-500;
+$chart-text-color: bd.$bd-deep-blue-500;
+$chart-tooltip-bg: rgba(bd.$bd-deep-blue-500, 0.95);
+$chart-tooltip-text: bd.$bd-warm-white;
+
+// ============================================
+// Export for use in TypeScript
+// ============================================
+:export {
+  // Primary series colors
+  chartColor1: $chart-color-1;
+  chartColor2: $chart-color-2;
+  chartColor3: $chart-color-3;
+  chartColor4: $chart-color-4;
+  chartColor5: $chart-color-5;
+  chartColor6: $chart-color-6;
+  chartColor7: $chart-color-7;
+  chartColor8: $chart-color-8;
+
+  // Status colors
+  chartColorSuccess: $chart-color-success;
+  chartColorWarning: $chart-color-warning;
+  chartColorError: $chart-color-error;
+  chartColorInfo: $chart-color-info;
+
+  // UI elements
+  chartGridColor: $chart-grid-color;
+  chartAxisColor: $chart-axis-color;
+  chartTextColor: $chart-text-color;
+}
