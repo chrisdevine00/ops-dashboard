@@ -37,6 +37,13 @@ interface DeviceWorkflow {
   states: StateTransition[];
 }
 
+// Instrument maintenance/adjustment periods
+interface InstrumentWorkflow {
+  name: string;
+  startHour: number;  // Hours from 07:00
+  endHour: number;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
@@ -195,6 +202,15 @@ export class App implements OnInit, OnDestroy {
     return workflows.sort((a, b) => a.start.getTime() - b.start.getTime());
   }
 
+  // Generate instrument maintenance periods
+  private getInstrumentWorkflows(): InstrumentWorkflow[] {
+    return [
+      { name: 'Refilling Pipettes', startHour: 2, endHour: 2.5 },
+      { name: 'Adding Media', startHour: 6, endHour: 6.75 },
+      { name: 'Calibration Check', startHour: 12, endHour: 12.5 },
+    ];
+  }
+
   private createGanttChart(title: string, workflows: WorkflowTask[], laneCount: number, customLabels?: string[]): EChartsOption {
     const baseDate = new Date(this.currentDate);
     baseDate.setHours(7, 0, 0, 0);
@@ -203,6 +219,9 @@ export class App implements OnInit, OnDestroy {
     const laneLabels = customLabels || Array.from({ length: laneCount }, (_, i) => `Lane ${i + 1}`);
     const yAxisLabels = [...laneLabels, '', 'Alerts & Errors'];
     const ALERTS_Y_INDEX = yAxisLabels.length - 1;
+
+    // Get instrument maintenance periods
+    const instrumentWorkflows = this.getInstrumentWorkflows();
 
     // Prepare series data for Gantt chart
     const seriesData: any[] = [];
@@ -371,6 +390,91 @@ export class App implements OnInit, OnDestroy {
         }
       },
       series: [
+        // Instrument maintenance columns (vertical bands)
+        {
+          name: 'InstrumentWorkflows',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const dataIndex = params.dataIndex;
+            const item = instrumentWorkflows[dataIndex];
+            if (!item) return;
+
+            const xStart = api.coord([item.startHour, 0]);
+            const xEnd = api.coord([item.endHour, 0]);
+            const yTop = api.coord([0, ALERTS_Y_INDEX]);
+            const yBottom = api.coord([0, 0]);
+            const chartHeight = yBottom[1] - yTop[1] + api.size([0, 1])[1];
+
+            return {
+              type: 'group',
+              children: [
+                // Light gray fill
+                {
+                  type: 'rect',
+                  shape: {
+                    x: xStart[0],
+                    y: yTop[1] - api.size([0, 1])[1] / 2,
+                    width: xEnd[0] - xStart[0],
+                    height: chartHeight
+                  },
+                  style: {
+                    fill: 'rgba(191, 184, 184, 0.15)'
+                  },
+                  z: 0
+                },
+                // Left border (darker gray dotted)
+                {
+                  type: 'line',
+                  shape: {
+                    x1: xStart[0],
+                    y1: yTop[1] - api.size([0, 1])[1] / 2,
+                    x2: xStart[0],
+                    y2: yTop[1] - api.size([0, 1])[1] / 2 + chartHeight
+                  },
+                  style: {
+                    stroke: 'rgba(128, 128, 128, 0.6)',
+                    lineWidth: 1,
+                    lineDash: [3, 3]
+                  },
+                  z: 0
+                },
+                // Right border (darker gray dotted)
+                {
+                  type: 'line',
+                  shape: {
+                    x1: xEnd[0],
+                    y1: yTop[1] - api.size([0, 1])[1] / 2,
+                    x2: xEnd[0],
+                    y2: yTop[1] - api.size([0, 1])[1] / 2 + chartHeight
+                  },
+                  style: {
+                    stroke: 'rgba(128, 128, 128, 0.6)',
+                    lineWidth: 1,
+                    lineDash: [3, 3]
+                  },
+                  z: 0
+                }
+              ]
+            };
+          },
+          data: instrumentWorkflows.map((_, i) => i),
+          silent: false,
+          tooltip: {
+            formatter: (params: any) => {
+              const item = instrumentWorkflows[params.dataIndex];
+              if (!item) return '';
+              const startHour = (7 + item.startHour) % 24;
+              const endHour = (7 + item.endHour) % 24;
+              const startMin = Math.round((item.startHour % 1) * 60);
+              const endMin = Math.round((item.endHour % 1) * 60);
+              return `
+                <strong>${item.name}</strong><br/>
+                ${Math.floor(startHour).toString().padStart(2, '0')}:${startMin.toString().padStart(2, '0')} -
+                ${Math.floor(endHour).toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}
+              `;
+            }
+          }
+        },
         // Background highlight for alerts section
         {
           name: 'AlertsBackground',
@@ -392,7 +496,7 @@ export class App implements OnInit, OnDestroy {
               style: {
                 fill: 'rgba(255, 107, 97, 0.08)'
               },
-              z: 0
+              z: 1
             };
           },
           data: [0],
@@ -485,7 +589,7 @@ export class App implements OnInit, OnDestroy {
     baseDate.setHours(7, 0, 0, 0); // Start at 07:00 to match other charts
 
     const workflows: DeviceWorkflow[] = [
-      // === Boot sequence at 18:00 ===
+      // === Boot sequence at 07:00 ===
       {
         startTime: new Date(baseDate.getTime()),
         states: [
@@ -495,27 +599,6 @@ export class App implements OnInit, OnDestroy {
           { timestamp: new Date(baseDate.getTime() + 60000), state: 'Offline Starting' },     // +1m
           { timestamp: new Date(baseDate.getTime() + 90000), state: 'Online Pause Idle' },    // +1.5m
           { timestamp: new Date(baseDate.getTime() + 120000), state: 'Online' },              // +2m
-        ]
-      },
-      // === Brief pause sequence at 22:15 ===
-      {
-        startTime: new Date(baseDate.getTime() + 255 * 60000),  // 22:15
-        states: [
-          { timestamp: new Date(baseDate.getTime() + 255 * 60000), state: 'Online Pause Idle' },
-          { timestamp: new Date(baseDate.getTime() + 255 * 60000 + 20000), state: 'Pause Idle' },
-          { timestamp: new Date(baseDate.getTime() + 255 * 60000 + 45000), state: 'Online Pause Idle' },
-          { timestamp: new Date(baseDate.getTime() + 255 * 60000 + 60000), state: 'Online' },
-        ]
-      },
-      // === Shutdown sequence at 01:30 ===
-      {
-        startTime: new Date(baseDate.getTime() + 450 * 60000),  // 01:30
-        states: [
-          { timestamp: new Date(baseDate.getTime() + 450 * 60000), state: 'Offline Starting' },
-          { timestamp: new Date(baseDate.getTime() + 450 * 60000 + 15000), state: 'Offline Completing' },
-          { timestamp: new Date(baseDate.getTime() + 450 * 60000 + 30000), state: 'Offline Idle' },
-          { timestamp: new Date(baseDate.getTime() + 450 * 60000 + 45000), state: 'Shutdown' },
-          { timestamp: new Date(baseDate.getTime() + 450 * 60000 + 60000), state: 'Powered Off' },
         ]
       },
     ];
@@ -723,6 +806,77 @@ export class App implements OnInit, OnDestroy {
         }
       },
       series: [
+        // Instrument maintenance columns (vertical bands)
+        {
+          name: 'InstrumentWorkflows',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const dataIndex = params.dataIndex;
+            const instrumentWorkflows = this.getInstrumentWorkflows();
+            const item = instrumentWorkflows[dataIndex];
+            if (!item) return;
+
+            const xStart = api.coord([item.startHour, 0]);
+            const xEnd = api.coord([item.endHour, 0]);
+            const yTop = api.coord([0, 2]);
+            const yBottom = api.coord([0, 0]);
+            const chartHeight = yBottom[1] - yTop[1] + 30;
+
+            return {
+              type: 'group',
+              children: [
+                // Light gray fill
+                {
+                  type: 'rect',
+                  shape: {
+                    x: xStart[0],
+                    y: yTop[1] - 15,
+                    width: xEnd[0] - xStart[0],
+                    height: chartHeight
+                  },
+                  style: {
+                    fill: 'rgba(191, 184, 184, 0.15)'
+                  },
+                  z: 0
+                },
+                // Left border (darker gray dotted)
+                {
+                  type: 'line',
+                  shape: {
+                    x1: xStart[0],
+                    y1: yTop[1] - 15,
+                    x2: xStart[0],
+                    y2: yTop[1] - 15 + chartHeight
+                  },
+                  style: {
+                    stroke: 'rgba(128, 128, 128, 0.6)',
+                    lineWidth: 1,
+                    lineDash: [3, 3]
+                  },
+                  z: 0
+                },
+                // Right border (darker gray dotted)
+                {
+                  type: 'line',
+                  shape: {
+                    x1: xEnd[0],
+                    y1: yTop[1] - 15,
+                    x2: xEnd[0],
+                    y2: yTop[1] - 15 + chartHeight
+                  },
+                  style: {
+                    stroke: 'rgba(128, 128, 128, 0.6)',
+                    lineWidth: 1,
+                    lineDash: [3, 3]
+                  },
+                  z: 0
+                }
+              ]
+            };
+          },
+          data: [0], // Only show first instrument workflow on PX chart
+          silent: false
+        },
         // Background highlight for alerts section
         {
           name: 'AlertsBackground',
@@ -745,7 +899,7 @@ export class App implements OnInit, OnDestroy {
               style: {
                 fill: 'rgba(255, 107, 97, 0.08)' // Light red background
               },
-              z: 0
+              z: 1
             };
           },
           data: [0],
