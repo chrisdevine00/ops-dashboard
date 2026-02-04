@@ -32,12 +32,42 @@
   margin-bottom: 24px;
   gap: 16px;
 
+  .date-picker-wrapper {
+    position: relative;
+
+    .hidden-date-input {
+      position: absolute;
+      width: 0;
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
   .current-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 1.25rem;
     font-weight: 500;
     color: rgba(0, 0, 0, 0.87);
     min-width: 200px;
-    text-align: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    .calendar-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: rgba(0, 0, 0, 0.54);
+    }
   }
 
   .nav-button {
@@ -46,6 +76,10 @@
       width: 28px;
       height: 28px;
     }
+  }
+
+  .today-button {
+    margin-left: 8px;
   }
 }
 

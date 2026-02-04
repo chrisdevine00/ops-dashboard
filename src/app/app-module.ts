@@ -11,6 +11,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 // ECharts
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -34,6 +38,10 @@ import { App } from './app';
     MatButtonModule,
     MatCardModule,
     MatGridListModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    MatFormFieldModule,
     // ECharts Module
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')

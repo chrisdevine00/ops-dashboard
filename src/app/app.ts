@@ -60,7 +60,12 @@ export class App implements OnInit, OnDestroy {
 
   // Date navigation
   currentDate: Date = new Date();
+  today: Date = new Date();
   formattedDate = '';
+
+  get isToday(): boolean {
+    return this.currentDate.toDateString() === this.today.toDateString();
+  }
 
   // Chart options
   leftGxChartOptions: EChartsOption = {};
@@ -96,6 +101,22 @@ export class App implements OnInit, OnDestroy {
     this.updateFormattedDate();
     this.generateCharts();
     this.updateMetrics();
+  }
+
+  goToToday(): void {
+    this.currentDate = new Date();
+    this.updateFormattedDate();
+    this.generateCharts();
+    this.updateMetrics();
+  }
+
+  onDateChange(event: any): void {
+    if (event.value) {
+      this.currentDate = event.value;
+      this.updateFormattedDate();
+      this.generateCharts();
+      this.updateMetrics();
+    }
   }
 
   private generateMockWorkflows(count: number, laneCount: number): WorkflowTask[] {

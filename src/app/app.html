@@ -8,16 +8,31 @@
 </mat-toolbar>
 
 <div class="container">
-  <h1>Workflow Operations Dashboard</h1>
-
   <!-- Date Navigation -->
   <div class="date-navigation">
     <button mat-icon-button (click)="prevDay()" class="nav-button">
       <mat-icon>chevron_left</mat-icon>
     </button>
-    <div class="current-date">{{ formattedDate }}</div>
-    <button mat-icon-button (click)="nextDay()" class="nav-button">
+    <div class="date-picker-wrapper">
+      <div class="current-date" (click)="picker.open()">
+        {{ formattedDate }}
+        <mat-icon class="calendar-icon">calendar_today</mat-icon>
+      </div>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [value]="currentDate"
+        [max]="today"
+        (dateChange)="onDateChange($event)"
+        class="hidden-date-input"
+      >
+      <mat-datepicker #picker></mat-datepicker>
+    </div>
+    <button mat-icon-button (click)="nextDay()" class="nav-button" [disabled]="isToday">
       <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button mat-stroked-button (click)="goToToday()" class="today-button" [disabled]="isToday">
+      Today
     </button>
   </div>
 
