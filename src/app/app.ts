@@ -323,11 +323,11 @@ export class App implements OnInit, OnDestroy {
         textStyle: { color: '#FFFFFF' }
       },
       grid: {
-        left: '8%',
+        left: 120,
         right: '3%',
         top: '12%',
         bottom: '10%',
-        containLabel: true
+        containLabel: false
       },
       xAxis: {
         type: 'value',
@@ -482,7 +482,7 @@ export class App implements OnInit, OnDestroy {
 
   private generateMockDeviceWorkflows(): DeviceWorkflow[] {
     const baseDate = new Date(this.currentDate);
-    baseDate.setHours(18, 0, 0, 0); // Start at 18:00 to match wireframe
+    baseDate.setHours(7, 0, 0, 0); // Start at 07:00 to match other charts
 
     const workflows: DeviceWorkflow[] = [
       // === Boot sequence at 18:00 ===
@@ -530,7 +530,7 @@ export class App implements OnInit, OnDestroy {
   private generateMockPxAlerts(): { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] {
     const alerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] = [];
     const baseDate = new Date(this.currentDate);
-    baseDate.setHours(18, 0, 0, 0);
+    baseDate.setHours(7, 0, 0, 0);
 
     // PX-specific alerts (aligned with boot/shutdown sequences)
     const pxAlerts = [
@@ -582,7 +582,7 @@ export class App implements OnInit, OnDestroy {
     const totalMinutes = hoursFromStart * 60;
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.round(totalMinutes % 60);
-    const displayHour = (18 + hours) % 24;
+    const displayHour = (7 + hours) % 24;
     return `${displayHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   }
 
@@ -591,7 +591,7 @@ export class App implements OnInit, OnDestroy {
     const alerts = this.generateMockPxAlerts();
 
     const baseDate = new Date(this.currentDate);
-    baseDate.setHours(18, 0, 0, 0); // Timeline starts at 18:00
+    baseDate.setHours(7, 0, 0, 0); // Timeline starts at 18:00
 
     // Simple Y-axis layout: Device State at 0, Alerts at 2
     const DEVICE_STATE_Y = 0;
@@ -677,7 +677,7 @@ export class App implements OnInit, OnDestroy {
         extraCssText: 'max-height: 400px; overflow-y: auto;'
       },
       grid: {
-        left: '12%',
+        left: 120,
         right: '3%',
         top: '20%',
         bottom: '25%',
@@ -690,7 +690,7 @@ export class App implements OnInit, OnDestroy {
         interval: 1,
         axisLabel: {
           formatter: (value: number) => {
-            const hour = (18 + value) % 24;
+            const hour = (7 + value) % 24;
             return `${hour.toString().padStart(2, '0')}:00`;
           },
           fontSize: 9,
