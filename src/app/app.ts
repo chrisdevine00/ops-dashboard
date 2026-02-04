@@ -109,21 +109,63 @@ export class App implements OnInit, OnDestroy {
     const baseDate = new Date(this.currentDate);
     baseDate.setHours(7, 0, 0, 0); // Start at 07:00
 
+    // Operating window: 07:00 to 20:00 (13 hours = 780 minutes)
+    const operatingWindowMinutes = 13 * 60;
+
+    // Track end times for each lane to prevent overlaps
+    const laneEndTimes: number[] = Array(laneCount).fill(baseDate.getTime());
+
+    // Generate random start times spread across the operating window
+    const startTimes: { time: number; lane: number }[] = [];
     for (let i = 0; i < count; i++) {
+      const randomStartMinutes = Math.random() * operatingWindowMinutes;
+      startTimes.push({
+        time: baseDate.getTime() + randomStartMinutes * 60000,
+        lane: -1 // Will be assigned
+      });
+    }
+
+    // Sort by start time
+    startTimes.sort((a, b) => a.time - b.time);
+
+    // Assign lanes ensuring no overlaps
+    for (const item of startTimes) {
       const workflow = workflowTypes[Math.floor(Math.random() * workflowTypes.length)];
-      const lane = Math.floor(Math.random() * laneCount);
 
-      // Random start time between 07:00 and 06:00 next day (24hr period)
-      const startMinutes = Math.random() * (24 * 60);
-      const start = new Date(baseDate.getTime() + startMinutes * 60000);
+      // Find a lane where this workflow can fit (lane end time <= desired start)
+      let lane = -1;
+      for (let l = 0; l < laneCount; l++) {
+        if (laneEndTimes[l] <= item.time) {
+          lane = l;
+          break;
+        }
+      }
 
-      // Duration between 30 minutes and 4 hours
+      // If no lane available, find the one with earliest end and adjust start
+      if (lane === -1) {
+        lane = 0;
+        let earliestEnd = laneEndTimes[0];
+        for (let l = 1; l < laneCount; l++) {
+          if (laneEndTimes[l] < earliestEnd) {
+            earliestEnd = laneEndTimes[l];
+            lane = l;
+          }
+        }
+        item.time = laneEndTimes[lane] + 5 * 60000; // 5 min gap
+      }
+
+      const start = new Date(item.time);
+
+      // Duration between 30 minutes and 4 hours (240 minutes max)
       const durationMinutes = 30 + Math.random() * 210;
       const end = new Date(start.getTime() + durationMinutes * 60000);
 
+      // Update lane end time
+      laneEndTimes[lane] = end.getTime();
+
       // Random status
       const rand = Math.random();
-      const status = rand > 0.85 ? 'warning' : rand > 0.95 ? 'alert' : 'normal';
+      const status = rand > 0.9 ? 'alert' : rand > 0.75 ? 'warning' : 'normal';
 
       workflows.push({
         name: workflow.name,
@@ -411,12 +453,12 @@ export class App implements OnInit, OnDestroy {
 
   private generateCharts(): void {
     // Left GX: 10 workflows across 10 lanes
-    const leftGxWorkflows = this.generateMockWorkflows(25, 10);
-    this.leftGxChartOptions = this.createGanttChart('Left GX', leftGxWorkflows, 10);
+    const leftGxWorkflows = this.generateMockWorkflows(20, 9);
+    this.leftGxChartOptions = this.createGanttChart('Left GX', leftGxWorkflows, 9);
 
-    // Right MX: 12 workflows across 12 lanes
-    const rightMxWorkflows = this.generateMockWorkflows(30, 12);
-    this.rightMxChartOptions = this.createGanttChart('Right MX', rightMxWorkflows, 12);
+    // Right MX: workflows across 9 lanes
+    const rightMxWorkflows = this.generateMockWorkflows(20, 9);
+    this.rightMxChartOptions = this.createGanttChart('Right MX', rightMxWorkflows, 9);
 
     // PX: State transition timeline chart
     this.pxChartOptions = this.createStateTransitionChart();
