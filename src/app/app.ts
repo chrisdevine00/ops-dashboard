@@ -11,6 +11,7 @@ const BD_GRAY = '#BFB8B8';       // Neutral
 // BD Secondary Colors for Data Visualization
 const BD_COMET = '#2995C5';       // Cyan/teal - primary chart color
 const BD_NEBULA = '#00C9A7';      // Green - success/completed
+const BD_NEBULA_DARK = '#00A88F'; // Dark green - device state
 const BD_AURORA = '#FA7C23';      // Orange - warnings (4-12hr)
 const BD_AURORA_LIGHT = '#FFB84D'; // Light orange - extended (12hr+)
 const BD_INFRARED = '#FF6B61';    // Red - errors/alerts
@@ -702,6 +703,19 @@ export class App implements OnInit, OnDestroy {
       };
     });
 
+    // Generate heartbeat dots for off hours (20:00 to 07:00 = hours 13-24 on timeline)
+    // Hourly dots are larger, 10-min interval dots are smaller
+    const heartbeatData: any[] = [];
+    // From 20:00 (hour 13) to 07:00 next day (hour 24), every 10 minutes (1/6 hour)
+    for (let hour = 13; hour < 24; hour += (10 / 60)) {
+      const isHourMark = Math.abs(hour - Math.round(hour)) < 0.01;
+      heartbeatData.push({
+        value: [hour, DEVICE_STATE_Y],
+        symbolSize: isHourMark ? 6 : 3,
+        isHourly: isHourMark
+      });
+    }
+
     const formatTimeFn = this.formatTime.bind(this);
 
     return {
@@ -749,6 +763,18 @@ export class App implements OnInit, OnDestroy {
 
             html += '</table></div>';
             return html;
+          }
+
+          // Handle heartbeat dots
+          if (params.seriesName === 'Heartbeat') {
+            const timeStr = formatTimeFn(params.value[0]);
+            return `
+              <div style="min-width: 150px;">
+                <strong>System Heartbeat</strong><br/>
+                <strong>Time:</strong> ${timeStr}<br/>
+                <span style="color: #aaa;">Off-hours monitoring</span>
+              </div>
+            `;
           }
 
           return '';
@@ -939,7 +965,7 @@ export class App implements OnInit, OnDestroy {
           data: workflowDotsData,
           symbolSize: 14,
           itemStyle: {
-            color: BD_COMET,
+            color: BD_NEBULA_DARK,
             borderColor: '#fff',
             borderWidth: 2
           },
@@ -947,10 +973,25 @@ export class App implements OnInit, OnDestroy {
             scale: 1.5,
             itemStyle: {
               shadowBlur: 10,
-              shadowColor: 'rgba(41, 149, 197, 0.5)'
+              shadowColor: 'rgba(0, 168, 143, 0.5)'
             }
           },
           z: 2
+        },
+        {
+          name: 'Heartbeat',
+          type: 'scatter',
+          data: heartbeatData,
+          symbolSize: (value: any, params: any) => {
+            return params.data.symbolSize || 4;
+          },
+          itemStyle: {
+            color: '#999999'  // Lighter gray
+          },
+          emphasis: {
+            scale: 1.3
+          },
+          z: 1
         },
         {
           name: 'Alerts',
