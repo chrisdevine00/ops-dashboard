@@ -135,12 +135,10 @@ export class App implements OnInit, OnDestroy {
     const baseDate = new Date(this.currentDate);
     baseDate.setHours(7, 0, 0, 0);
 
-    // Generate 24-hour timeline labels (07:00 to 07:00 next day)
-    const timeLabels: string[] = [];
-    for (let hour = 0; hour < 25; hour++) {
-      const displayHour = (7 + hour) % 24;
-      timeLabels.push(`${displayHour.toString().padStart(2, '0')}:00`);
-    }
+    // Y-axis labels: workflow lanes + gap + Alerts & Errors at top
+    const laneLabels = customLabels || Array.from({ length: laneCount }, (_, i) => `Lane ${i + 1}`);
+    const yAxisLabels = [...laneLabels, '', 'Alerts & Errors'];
+    const ALERTS_Y_INDEX = yAxisLabels.length - 1;
 
     // Prepare series data for Gantt chart
     const seriesData: any[] = [];
@@ -173,16 +171,39 @@ export class App implements OnInit, OnDestroy {
         workflowData: workflow // Store for tooltip
       });
 
-      // Add alert markers
-      if (workflow.status === 'alert' || Math.random() > 0.7) {
+      // Add alert markers to the Alerts & Errors lane at top
+      if (workflow.status === 'alert' || workflow.status === 'warning') {
         const alertTime = startHours + Math.random() * (endHours - startHours);
+        const severity = workflow.status === 'alert' ? 'error' : 'warning';
         alertMarkers.push({
-          coord: [alertTime, workflow.lane],
-          symbolSize: 8,
-          itemStyle: { color: BD_RED }
+          value: [alertTime, ALERTS_Y_INDEX],
+          itemStyle: {
+            color: severity === 'error' ? BD_RED : BD_ORANGE
+          },
+          alert: {
+            time: alertTime,
+            severity: severity,
+            workflow: workflow.name,
+            acronym: workflow.acronym
+          }
         });
       }
     });
+
+    // Add some random info alerts
+    for (let i = 0; i < 3; i++) {
+      const alertTime = Math.random() * 24;
+      alertMarkers.push({
+        value: [alertTime, ALERTS_Y_INDEX],
+        itemStyle: { color: '#333333' },
+        alert: {
+          time: alertTime,
+          severity: 'info',
+          workflow: 'System',
+          acronym: 'SYS'
+        }
+      });
+    }
 
     return {
       title: {
@@ -196,7 +217,9 @@ export class App implements OnInit, OnDestroy {
         }
       },
       tooltip: {
+        trigger: 'item',
         formatter: (params: any) => {
+          // Handle workflow bars
           if (params.componentType === 'series' && params.data.workflowData) {
             const wf = params.data.workflowData;
             const duration = Math.round((wf.end.getTime() - wf.start.getTime()) / (1000 * 60));
@@ -209,6 +232,24 @@ export class App implements OnInit, OnDestroy {
               <strong>Status:</strong> ${wf.status.toUpperCase()}
             `;
           }
+          // Handle alert markers
+          if (params.seriesName === 'Alerts' && params.data.alert) {
+            const alert = params.data.alert;
+            const hours = Math.floor(alert.time);
+            const minutes = Math.round((alert.time - hours) * 60);
+            const displayHour = (7 + hours) % 24;
+            const timeStr = `${displayHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            const severityColor = alert.severity === 'error' ? BD_RED :
+                                  alert.severity === 'warning' ? BD_ORANGE : '#333';
+            return `
+              <div style="min-width: 180px;">
+                <strong>Alert</strong><br/>
+                <strong>Time:</strong> ${timeStr}<br/>
+                <strong>Severity:</strong> <span style="color: ${severityColor}; font-weight: bold;">${alert.severity.toUpperCase()}</span><br/>
+                <strong>Workflow:</strong> ${alert.workflow} (${alert.acronym})
+              </div>
+            `;
+          }
           return '';
         },
         backgroundColor: 'rgba(6, 10, 61, 0.95)',
@@ -217,9 +258,9 @@ export class App implements OnInit, OnDestroy {
         textStyle: { color: '#FFFFFF' }
       },
       grid: {
-        left: '5%',
+        left: '8%',
         right: '3%',
-        top: '15%',
+        top: '12%',
         bottom: '10%',
         containLabel: true
       },
@@ -249,7 +290,7 @@ export class App implements OnInit, OnDestroy {
       },
       yAxis: {
         type: 'category',
-        data: customLabels || Array.from({ length: laneCount }, (_, i) => `Lane ${i + 1}`),
+        data: yAxisLabels,
         axisLabel: {
           fontSize: 10,
           color: '#060A3D'
@@ -265,7 +306,64 @@ export class App implements OnInit, OnDestroy {
         }
       },
       series: [
+        // Background highlight for alerts section
         {
+          name: 'AlertsBackground',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const yPos = api.coord([0, ALERTS_Y_INDEX]);
+            const xStart = api.coord([0, 0]);
+            const xEnd = api.coord([24, 0]);
+            const height = api.size([0, 1])[1];
+
+            return {
+              type: 'rect',
+              shape: {
+                x: xStart[0],
+                y: yPos[1] - height / 2,
+                width: xEnd[0] - xStart[0],
+                height: height
+              },
+              style: {
+                fill: 'rgba(255, 107, 97, 0.08)'
+              },
+              z: 0
+            };
+          },
+          data: [0],
+          silent: true
+        },
+        // Divider line between alerts and workflow lanes
+        {
+          name: 'Divider',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const y = api.coord([0, laneCount + 0.5]);
+            const xStart = api.coord([0, 0]);
+            const xEnd = api.coord([24, 0]);
+
+            return {
+              type: 'line',
+              shape: {
+                x1: xStart[0],
+                y1: y[1],
+                x2: xEnd[0],
+                y2: y[1]
+              },
+              style: {
+                stroke: BD_GRAY,
+                lineWidth: 1,
+                lineDash: [4, 4]
+              },
+              z: 0
+            };
+          },
+          data: [0],
+          silent: true
+        },
+        // Workflow bars
+        {
+          name: 'Workflows',
           type: 'custom',
           renderItem: (params: any, api: any) => {
             const categoryIndex = api.value(0);
@@ -288,16 +386,17 @@ export class App implements OnInit, OnDestroy {
             x: [1, 2],
             y: 0
           },
-          data: seriesData
+          data: seriesData,
+          z: 2
         },
+        // Alert markers in the Alerts & Errors lane
         {
+          name: 'Alerts',
           type: 'scatter',
-          symbolSize: 8,
+          symbolSize: 10,
+          symbol: 'diamond',
           data: alertMarkers,
-          itemStyle: {
-            color: BD_RED
-          },
-          z: 10
+          z: 3
         }
       ]
     };
