@@ -18,6 +18,17 @@ interface WorkflowTask {
   lane: number;
 }
 
+interface StateTransition {
+  timestamp: Date;
+  state: string;
+}
+
+// A workflow is a sequence of state transitions that happen together
+interface DeviceWorkflow {
+  startTime: Date;
+  states: StateTransition[];
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
@@ -301,11 +312,151 @@ export class App implements OnInit, OnDestroy {
     const rightMxWorkflows = this.generateMockWorkflows(30, 12);
     this.rightMxChartOptions = this.createGanttChart('Right MX', rightMxWorkflows, 12);
 
-    // PX: Sankey diagram for workflow state transitions
-    this.pxChartOptions = this.createSankeyChart();
+    // PX: State transition timeline chart
+    this.pxChartOptions = this.createStateTransitionChart();
   }
 
-  private createSankeyChart(): EChartsOption {
+  private generateMockDeviceWorkflows(): DeviceWorkflow[] {
+    const baseDate = new Date(this.currentDate);
+    baseDate.setHours(18, 0, 0, 0); // Start at 18:00 to match wireframe
+
+    const workflows: DeviceWorkflow[] = [
+      // === Boot sequence at 18:00 ===
+      {
+        startTime: new Date(baseDate.getTime()),
+        states: [
+          { timestamp: new Date(baseDate.getTime()), state: 'Powered Off' },
+          { timestamp: new Date(baseDate.getTime() + 30000), state: 'Powered on Starting' },  // +30s
+          { timestamp: new Date(baseDate.getTime() + 45000), state: 'Offline Idle' },         // +45s
+          { timestamp: new Date(baseDate.getTime() + 60000), state: 'Offline Starting' },     // +1m
+          { timestamp: new Date(baseDate.getTime() + 90000), state: 'Online Pause Idle' },    // +1.5m
+          { timestamp: new Date(baseDate.getTime() + 120000), state: 'Online' },              // +2m
+        ]
+      },
+      // === Brief pause sequence at 22:15 ===
+      {
+        startTime: new Date(baseDate.getTime() + 255 * 60000),  // 22:15
+        states: [
+          { timestamp: new Date(baseDate.getTime() + 255 * 60000), state: 'Online Pause Idle' },
+          { timestamp: new Date(baseDate.getTime() + 255 * 60000 + 20000), state: 'Pause Idle' },
+          { timestamp: new Date(baseDate.getTime() + 255 * 60000 + 45000), state: 'Online Pause Idle' },
+          { timestamp: new Date(baseDate.getTime() + 255 * 60000 + 60000), state: 'Online' },
+        ]
+      },
+      // === Shutdown sequence at 01:30 ===
+      {
+        startTime: new Date(baseDate.getTime() + 450 * 60000),  // 01:30
+        states: [
+          { timestamp: new Date(baseDate.getTime() + 450 * 60000), state: 'Offline Starting' },
+          { timestamp: new Date(baseDate.getTime() + 450 * 60000 + 15000), state: 'Offline Completing' },
+          { timestamp: new Date(baseDate.getTime() + 450 * 60000 + 30000), state: 'Offline Idle' },
+          { timestamp: new Date(baseDate.getTime() + 450 * 60000 + 45000), state: 'Shutdown' },
+          { timestamp: new Date(baseDate.getTime() + 450 * 60000 + 60000), state: 'Powered Off' },
+        ]
+      },
+    ];
+
+    return workflows;
+  }
+
+  // Store alerts for cross-chart reference
+  private gxAlerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] = [];
+  private mxAlerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] = [];
+
+  private generateMockPxAlerts(): { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] {
+    const alerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] = [];
+    const baseDate = new Date(this.currentDate);
+    baseDate.setHours(18, 0, 0, 0);
+
+    // PX-specific alerts (aligned with boot/shutdown sequences)
+    const pxAlerts = [
+      { minutesFromStart: 1, severity: 'info' as const, source: 'PX', message: 'System powered on' },
+      { minutesFromStart: 5, severity: 'info' as const, source: 'PX', message: 'Boot sequence complete' },
+      { minutesFromStart: 450, severity: 'info' as const, source: 'PX', message: 'Initiating shutdown' },
+    ];
+
+    // GX-referenced alerts (spread across 24hr period)
+    this.gxAlerts = [
+      { minutesFromStart: 120, severity: 'warning' as const, source: 'Left GX', message: 'HPV workflow delayed' },   // 20:00
+      { minutesFromStart: 360, severity: 'error' as const, source: 'Left GX', message: 'CBC analysis failed' },      // 00:00
+    ].map(a => ({
+      timestamp: new Date(baseDate.getTime() + a.minutesFromStart * 60000),
+      severity: a.severity,
+      source: a.source,
+      message: a.message
+    }));
+
+    // MX-referenced alerts
+    this.mxAlerts = [
+      { minutesFromStart: 180, severity: 'error' as const, source: 'Right MX', message: 'FluA processing error' },   // 21:00
+      { minutesFromStart: 540, severity: 'warning' as const, source: 'Right MX', message: 'VP workflow warning' },   // 03:00
+    ].map(a => ({
+      timestamp: new Date(baseDate.getTime() + a.minutesFromStart * 60000),
+      severity: a.severity,
+      source: a.source,
+      message: a.message
+    }));
+
+    // Combine all alerts
+    pxAlerts.forEach(({ minutesFromStart, severity, source, message }) => {
+      alerts.push({
+        timestamp: new Date(baseDate.getTime() + minutesFromStart * 60000),
+        severity,
+        source,
+        message
+      });
+    });
+
+    alerts.push(...this.gxAlerts);
+    alerts.push(...this.mxAlerts);
+
+    // Sort by timestamp
+    return alerts.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+  }
+
+  private formatTime(hoursFromStart: number): string {
+    const totalMinutes = hoursFromStart * 60;
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.round(totalMinutes % 60);
+    const displayHour = (18 + hours) % 24;
+    return `${displayHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  }
+
+  private createStateTransitionChart(): EChartsOption {
+    const workflows = this.generateMockDeviceWorkflows();
+    const alerts = this.generateMockPxAlerts();
+
+    const baseDate = new Date(this.currentDate);
+    baseDate.setHours(18, 0, 0, 0); // Timeline starts at 18:00
+
+    // Simple Y-axis layout: Device State at 0, Alerts at 2
+    const DEVICE_STATE_Y = 0;
+    const ALERTS_Y = 2;
+
+    // Create scatter data for workflow dots (one dot per workflow at start time)
+    const workflowDotsData = workflows.map((workflow, index) => {
+      const hoursFromStart = (workflow.startTime.getTime() - baseDate.getTime()) / (1000 * 60 * 60);
+      return {
+        value: [hoursFromStart, DEVICE_STATE_Y],
+        workflowIndex: index,
+        workflow: workflow
+      };
+    });
+
+    // Convert alerts to scatter data - positioned at top
+    const alertData = alerts.map(alert => {
+      const hoursFromStart = (alert.timestamp.getTime() - baseDate.getTime()) / (1000 * 60 * 60);
+      const color = alert.severity === 'error' ? BD_RED :
+                    alert.severity === 'warning' ? BD_ORANGE : '#333333'; // Black for info
+      return {
+        value: [hoursFromStart, ALERTS_Y],
+        itemStyle: { color },
+        alert: alert
+      };
+    });
+
+    const formatTimeFn = this.formatTime.bind(this);
+
     return {
       title: {
         text: 'PX',
@@ -320,66 +471,176 @@ export class App implements OnInit, OnDestroy {
       tooltip: {
         trigger: 'item',
         formatter: (params: any) => {
-          if (params.dataType === 'edge') {
-            return `${params.data.source} → ${params.data.target}<br/><strong>${params.value}</strong> workflows`;
+          // Handle alert dots
+          if (params.seriesName === 'Alerts' && params.data.alert) {
+            const alert = params.data.alert;
+            const timeStr = formatTimeFn(params.value[0]);
+            const severityColor = alert.severity === 'error' ? BD_RED :
+                                  alert.severity === 'warning' ? BD_ORANGE : '#333';
+            return `
+              <div style="min-width: 200px;">
+                <strong>Alert</strong><br/>
+                <strong>Time:</strong> ${timeStr}<br/>
+                <strong>Source:</strong> ${alert.source}<br/>
+                <strong>Severity:</strong> <span style="color: ${severityColor}; font-weight: bold;">${alert.severity.toUpperCase()}</span><br/>
+                <strong>Message:</strong> ${alert.message}
+              </div>
+            `;
           }
-          return `<strong>${params.name}</strong><br/>${params.value || 0} workflows`;
+
+          // Handle workflow dots
+          if (params.seriesName === 'Device State' && params.data.workflow) {
+            const workflow = params.data.workflow as DeviceWorkflow;
+            let html = '<div style="min-width: 250px;"><strong>Device State Workflow</strong><br/><br/>';
+            html += '<table style="width: 100%; border-collapse: collapse;">';
+            html += '<tr style="border-bottom: 1px solid rgba(255,255,255,0.2);"><th style="text-align: left; padding: 2px 8px 2px 0;">Time</th><th style="text-align: left; padding: 2px 0;">State</th></tr>';
+
+            workflow.states.forEach((state) => {
+              const timeStr = state.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+              html += `<tr><td style="padding: 2px 8px 2px 0; color: #aaa;">${timeStr}</td><td style="padding: 2px 0;">${state.state}</td></tr>`;
+            });
+
+            html += '</table></div>';
+            return html;
+          }
+
+          return '';
         },
         backgroundColor: 'rgba(6, 10, 61, 0.95)',
         borderColor: BD_BLUE,
         borderWidth: 1,
-        textStyle: { color: '#FFFFFF' }
+        textStyle: { color: '#FFFFFF' },
+        extraCssText: 'max-height: 400px; overflow-y: auto;'
+      },
+      grid: {
+        left: '12%',
+        right: '3%',
+        top: '20%',
+        bottom: '25%',
+        containLabel: false
+      },
+      xAxis: {
+        type: 'value',
+        min: 0,
+        max: 24, // 24 hours from 18:00 to 18:00 next day
+        interval: 1,
+        axisLabel: {
+          formatter: (value: number) => {
+            const hour = (18 + value) % 24;
+            return `${hour.toString().padStart(2, '0')}:00`;
+          },
+          fontSize: 9,
+          rotate: 45
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: 'rgba(191, 184, 184, 0.3)',
+            type: 'dashed'
+          }
+        },
+        axisLine: {
+          lineStyle: { color: BD_GRAY }
+        }
+      },
+      yAxis: {
+        type: 'category',
+        data: ['Device State', '', 'Alerts & Errors'],
+        axisLabel: {
+          fontSize: 11,
+          color: '#060A3D',
+          fontWeight: 500
+        },
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: { color: BD_GRAY }
+        }
       },
       series: [
+        // Background highlight for alerts section
         {
-          type: 'graph',
-          layout: 'none',
-          symbolSize: 60,
-          roam: false,
-          label: {
-            show: true,
-            fontSize: 10,
-            fontWeight: 500,
-            color: '#FFFFFF'
-          },
-          edgeSymbol: ['none', 'arrow'],
-          edgeSymbolSize: 8,
-          data: [
-            { name: 'Received', x: 50, y: 150, value: 100, itemStyle: { color: BD_BLUE } },
-            { name: 'Accessioning', x: 150, y: 100, value: 95, itemStyle: { color: BD_BLUE } },
-            { name: 'Pre-analytical', x: 250, y: 150, value: 90, itemStyle: { color: BD_BLUE } },
-            { name: 'Testing', x: 350, y: 100, value: 85, itemStyle: { color: BD_BLUE } },
-            { name: 'Analysis', x: 450, y: 150, value: 80, itemStyle: { color: BD_BLUE } },
-            { name: 'Review', x: 550, y: 100, value: 75, itemStyle: { color: BD_ORANGE } },
-            { name: 'Validation', x: 650, y: 150, value: 70, itemStyle: { color: BD_BLUE } },
-            { name: 'Complete', x: 750, y: 125, value: 68, itemStyle: { color: '#4caf50' } }
-          ],
-          links: [
-            // Forward progression
-            { source: 'Received', target: 'Accessioning', value: 85, lineStyle: { color: BD_BLUE, width: 2 } },
-            { source: 'Received', target: 'Pre-analytical', value: 10, lineStyle: { color: BD_BLUE, width: 1, type: 'dashed' } },
-            { source: 'Accessioning', target: 'Pre-analytical', value: 80, lineStyle: { color: BD_BLUE, width: 2 } },
-            { source: 'Pre-analytical', target: 'Testing', value: 75, lineStyle: { color: BD_BLUE, width: 2 } },
-            { source: 'Testing', target: 'Analysis', value: 70, lineStyle: { color: BD_BLUE, width: 2 } },
-            { source: 'Analysis', target: 'Review', value: 75, lineStyle: { color: BD_BLUE, width: 2 } },
-            { source: 'Review', target: 'Validation', value: 70, lineStyle: { color: BD_BLUE, width: 2 } },
-            { source: 'Validation', target: 'Complete', value: 68, lineStyle: { color: BD_BLUE, width: 2 } },
+          name: 'AlertsBackground',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const yStart = api.coord([0, 2]);
+            const yEnd = api.coord([0, 2]);
+            const xStart = api.coord([0, 0]);
+            const xEnd = api.coord([24, 0]);
+            const height = 30;
 
-            // Backflow/rework paths
-            { source: 'Review', target: 'Testing', value: 5, lineStyle: { color: BD_RED, width: 1.5, type: 'dashed' } },
-            { source: 'Validation', target: 'Review', value: 2, lineStyle: { color: BD_RED, width: 1, type: 'dashed' } },
-            { source: 'Testing', target: 'Pre-analytical', value: 3, lineStyle: { color: BD_ORANGE, width: 1, type: 'dashed' } }
-          ],
-          lineStyle: {
-            opacity: 0.7,
-            curveness: 0.2
+            return {
+              type: 'rect',
+              shape: {
+                x: xStart[0],
+                y: yStart[1] - height / 2,
+                width: xEnd[0] - xStart[0],
+                height: height
+              },
+              style: {
+                fill: 'rgba(255, 107, 97, 0.08)' // Light red background
+              },
+              z: 0
+            };
+          },
+          data: [0],
+          silent: true
+        },
+        // Divider line between alerts and device state
+        {
+          name: 'Divider',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const y = api.coord([0, 1]);
+            const xStart = api.coord([0, 0]);
+            const xEnd = api.coord([24, 0]);
+
+            return {
+              type: 'line',
+              shape: {
+                x1: xStart[0],
+                y1: y[1],
+                x2: xEnd[0],
+                y2: y[1]
+              },
+              style: {
+                stroke: BD_GRAY,
+                lineWidth: 1,
+                lineDash: [4, 4]
+              },
+              z: 0
+            };
+          },
+          data: [0],
+          silent: true
+        },
+        {
+          name: 'Device State',
+          type: 'scatter',
+          data: workflowDotsData,
+          symbolSize: 14,
+          itemStyle: {
+            color: BD_BLUE,
+            borderColor: '#fff',
+            borderWidth: 2
           },
           emphasis: {
-            focus: 'adjacency',
-            lineStyle: {
-              width: 3
+            scale: 1.5,
+            itemStyle: {
+              shadowBlur: 10,
+              shadowColor: 'rgba(4, 70, 237, 0.5)'
             }
-          }
+          },
+          z: 2
+        },
+        {
+          name: 'Alerts',
+          type: 'scatter',
+          data: alertData,
+          symbolSize: 12,
+          symbol: 'diamond',
+          z: 3
         }
       ]
     };
