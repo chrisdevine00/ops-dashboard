@@ -9,11 +9,12 @@ const BD_ORANGE = '#FF6E00';     // Brand accent
 const BD_GRAY = '#BFB8B8';       // Neutral
 
 // BD Secondary Colors for Data Visualization
-const BD_COMET = '#2995C5';      // Cyan/teal - primary chart color
-const BD_NEBULA = '#00C9A7';     // Green - success/completed
-const BD_AURORA = '#FA7C23';     // Orange - warnings
-const BD_INFRARED = '#FF6B61';   // Red - errors/alerts
-const BD_ECLIPSE = '#FFC300';    // Gold - highlights
+const BD_COMET = '#2995C5';       // Cyan/teal - primary chart color
+const BD_NEBULA = '#00C9A7';      // Green - success/completed
+const BD_AURORA = '#FA7C23';      // Orange - warnings (4-12hr)
+const BD_AURORA_LIGHT = '#FFB84D'; // Light orange - extended (12hr+)
+const BD_INFRARED = '#FF6B61';    // Red - errors/alerts
+const BD_ECLIPSE = '#FFC300';     // Gold - highlights
 const BD_ULTRAVIOLET = '#9199D8'; // Purple - alternative data
 
 interface WorkflowTask {
@@ -156,16 +157,30 @@ export class App implements OnInit, OnDestroy {
 
       const start = new Date(item.time);
 
-      // Duration between 30 minutes and 4 hours (240 minutes max)
-      const durationMinutes = 30 + Math.random() * 210;
+      // Duration varies: most are under 4 hours, some go longer
+      let durationMinutes: number;
+      const rand = Math.random();
+      if (rand > 0.95) {
+        // ~5% are extended (12-16 hours)
+        durationMinutes = 720 + Math.random() * 240;
+      } else if (rand > 0.85) {
+        // ~10% are warnings (4-12 hours)
+        durationMinutes = 240 + Math.random() * 480;
+      } else {
+        // ~85% are normal (30 min to 4 hours)
+        durationMinutes = 30 + Math.random() * 210;
+      }
       const end = new Date(start.getTime() + durationMinutes * 60000);
 
       // Update lane end time
       laneEndTimes[lane] = end.getTime();
 
-      // Random status
-      const rand = Math.random();
-      const status = rand > 0.9 ? 'alert' : rand > 0.75 ? 'warning' : 'normal';
+      // Status based on duration
+      const durationHours = durationMinutes / 60;
+      const status: 'normal' | 'warning' | 'alert' =
+        durationHours >= 12 ? 'alert' :    // Extended (12hr+) - we'll use light orange
+        durationHours >= 4 ? 'warning' :   // Warning (4-12hr)
+        'normal';                          // Normal (<4hr)
 
       workflows.push({
         name: workflow.name,
@@ -202,8 +217,9 @@ export class App implements OnInit, OnDestroy {
       const startHours = (startTime - baseTime) / (1000 * 60 * 60);
       const endHours = (endTime - baseTime) / (1000 * 60 * 60);
 
-      const color = workflow.status === 'warning' ? BD_AURORA :
-                    workflow.status === 'alert' ? BD_INFRARED : BD_COMET;
+      const color = workflow.status === 'alert' ? BD_AURORA_LIGHT :  // Extended (12hr+)
+                    workflow.status === 'warning' ? BD_AURORA :      // Warning (4-12hr)
+                    BD_COMET;                                        // Normal (<4hr)
 
       seriesData.push({
         name: workflow.acronym,
@@ -220,14 +236,14 @@ export class App implements OnInit, OnDestroy {
         workflowData: workflow // Store for tooltip
       });
 
-      // Add alert markers to the Alerts & Errors lane at top
+      // Add alert markers to the Alerts & Errors lane at top for long-running workflows
       if (workflow.status === 'alert' || workflow.status === 'warning') {
         const alertTime = startHours + Math.random() * (endHours - startHours);
-        const severity = workflow.status === 'alert' ? 'error' : 'warning';
+        const severity = workflow.status === 'alert' ? 'extended' : 'warning';
         alertMarkers.push({
           value: [alertTime, ALERTS_Y_INDEX],
           itemStyle: {
-            color: severity === 'error' ? BD_INFRARED : BD_AURORA
+            color: severity === 'extended' ? BD_AURORA_LIGHT : BD_AURORA
           },
           alert: {
             time: alertTime,
@@ -288,7 +304,7 @@ export class App implements OnInit, OnDestroy {
             const minutes = Math.round((alert.time - hours) * 60);
             const displayHour = (7 + hours) % 24;
             const timeStr = `${displayHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-            const severityColor = alert.severity === 'error' ? BD_INFRARED :
+            const severityColor = alert.severity === 'extended' ? BD_AURORA_LIGHT :
                                   alert.severity === 'warning' ? BD_AURORA : '#333';
             return `
               <div style="min-width: 180px;">
@@ -623,7 +639,7 @@ export class App implements OnInit, OnDestroy {
           if (params.seriesName === 'Alerts' && params.data.alert) {
             const alert = params.data.alert;
             const timeStr = formatTimeFn(params.value[0]);
-            const severityColor = alert.severity === 'error' ? BD_INFRARED :
+            const severityColor = alert.severity === 'extended' ? BD_AURORA_LIGHT :
                                   alert.severity === 'warning' ? BD_AURORA : '#333';
             return `
               <div style="min-width: 200px;">
