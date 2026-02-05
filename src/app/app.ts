@@ -166,8 +166,8 @@ export class App implements OnInit, OnDestroy {
       }
   }
 
-  private generateMockWorkflows(count: number, laneCount: number): WorkflowTask[] {
-    const workflowTypes = [
+  private generateMockWorkflows(count: number, laneCount: number, allowedTypes?: string[]): WorkflowTask[] {
+    const allWorkflowTypes = [
       { name: 'Complete Blood Count', acronym: 'CBC' },
       { name: 'HPV Analysis', acronym: 'HPV' },
       { name: 'Chemistry Panel', acronym: 'CHEM' },
@@ -181,6 +181,11 @@ export class App implements OnInit, OnDestroy {
       { name: 'Electrolyte Panel', acronym: 'ELEC' },
       { name: 'Coagulation Studies', acronym: 'COAG' },
     ];
+
+    // Filter workflow types if allowedTypes is specified
+    const workflowTypes = allowedTypes
+      ? allWorkflowTypes.filter(wt => allowedTypes.includes(wt.acronym))
+      : allWorkflowTypes;
 
     const workflows: WorkflowTask[] = [];
     const baseDate = new Date(this.currentDate);
@@ -775,8 +780,8 @@ export class App implements OnInit, OnDestroy {
       { hour: 0.25, type: 'boot', label: 'System Boot' },        // 07:15 - boot sequence
     ];
 
-    // Left GX: 10 workflows across 10 lanes
-    const leftGxWorkflows = this.generateMockWorkflows(20, 9);
+    // Left GX: HPV tests only across 9 lanes
+    const leftGxWorkflows = this.generateMockWorkflows(20, 9, ['HPV']);
     this.leftGxChartOptions = this.createGanttChart('Left GX', leftGxWorkflows, 9);
 
     // Right MX: workflows across 9 lanes
