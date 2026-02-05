@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="toolbar">
   <button mat-icon-button class="home-button" title="Home">
-    <mat-icon>home</mat-icon>
+    <lucide-icon name="home" [size]="20"></lucide-icon>
   </button>
   <span class="title">{{ facilityName }} | {{ serialNumber }}</span>
   <span class="spacer"></span>
@@ -17,7 +17,7 @@
   <div class="refresh-section">
     <span class="refresh-info">{{ refreshText }}</span>
     <button mat-icon-button (click)="refreshNow()" [title]="'Refresh now'">
-      <mat-icon>refresh</mat-icon>
+      <lucide-icon name="refresh-cw" [size]="20"></lucide-icon>
     </button>
   </div>
 </mat-toolbar>
@@ -26,12 +26,12 @@
   <!-- Date Navigation -->
   <div class="date-navigation">
     <button mat-icon-button (click)="prevDay()" class="nav-button">
-      <mat-icon>chevron_left</mat-icon>
+      <lucide-icon name="chevron-left" [size]="24"></lucide-icon>
     </button>
     <div class="date-picker-wrapper">
       <div class="current-date" (click)="picker.open()">
         {{ formattedDate }}
-        <mat-icon class="calendar-icon">calendar_today</mat-icon>
+        <lucide-icon name="calendar" [size]="18" class="calendar-icon"></lucide-icon>
       </div>
       <input
         matInput
@@ -44,7 +44,7 @@
       <mat-datepicker #picker></mat-datepicker>
     </div>
     <button mat-icon-button (click)="nextDay()" class="nav-button" [disabled]="isToday">
-      <mat-icon>chevron_right</mat-icon>
+      <lucide-icon name="chevron-right" [size]="24"></lucide-icon>
     </button>
     <button mat-stroked-button (click)="goToToday()" class="today-button" [disabled]="isToday">
       Today

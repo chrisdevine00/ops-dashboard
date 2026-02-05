@@ -16,6 +16,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+// Lucide Icons
+import { LucideAngularModule, Home, RefreshCw, ChevronLeft, ChevronRight, Calendar } from 'lucide-angular';
+
 // ECharts
 import { NgxEchartsModule } from 'ngx-echarts';
 
@@ -42,6 +45,8 @@ import { App } from './app';
     MatNativeDateModule,
     MatInputModule,
     MatFormFieldModule,
+    // Lucide Icons
+    LucideAngularModule.pick({ Home, RefreshCw, ChevronLeft, ChevronRight, Calendar }),
     // ECharts Module
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
