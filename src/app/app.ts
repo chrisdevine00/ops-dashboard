@@ -57,11 +57,9 @@ export class App implements OnInit, OnDestroy {
   serialNumber = 'SN20240847';
 
   // Time displays
-  siteTime = '';
-  localTime = '';
+  siteTimeShort = '';
+  localTimeShort = '';
   private readonly siteTimezone = 'Europe/London';  // UTC+0/+1
-  private readonly siteTimezoneOffset = '+1:00';
-  private readonly localTimezoneOffset = '-4:00';
   private clockTimer: any;
 
   // Metrics
@@ -82,7 +80,7 @@ export class App implements OnInit, OnDestroy {
   // Auto-refresh
   private readonly REFRESH_INTERVAL = 10 * 60; // 10 minutes in seconds
   private refreshCountdown = this.REFRESH_INTERVAL;
-  refreshText = '';
+  refreshTextShort = '';
   private refreshTimer: any;
 
   // Chart options
@@ -110,30 +108,24 @@ export class App implements OnInit, OnDestroy {
   private updateClocks(): void {
     const now = new Date();
 
-    // Site time (e.g., Europe/London)
-    const siteTimeStr = now.toLocaleString('en-GB', {
+    // Site time - short format with timezone offset
+    const siteTime = now.toLocaleString('en-GB', {
       timeZone: this.siteTimezone,
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
       hour12: false
     });
-    this.siteTime = `${siteTimeStr} (UTC ${this.siteTimezoneOffset})`;
+    this.siteTimeShort = `${siteTime} +1`;
 
-    // Local time
-    const localTimeStr = now.toLocaleString('en-US', {
+    // Local time - short format with timezone offset
+    const localTime = now.toLocaleString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
       hour12: false
     });
-    this.localTime = `${localTimeStr} (UTC ${this.localTimezoneOffset})`;
+    const offsetHours = -Math.round(now.getTimezoneOffset() / 60);
+    const offsetStr = offsetHours >= 0 ? `+${offsetHours}` : `${offsetHours}`;
+    this.localTimeShort = `${localTime} ${offsetStr}`;
   }
 
   private updateFormattedDate(): void {
@@ -1107,7 +1099,7 @@ export class App implements OnInit, OnDestroy {
   private updateRefreshText(): void {
     const minutes = Math.floor(this.refreshCountdown / 60);
     const seconds = this.refreshCountdown % 60;
-    this.refreshText = `This page will refresh in ${minutes} minute${minutes !== 1 ? 's' : ''}, ${seconds} second${seconds !== 1 ? 's' : ''}.`;
+    this.refreshTextShort = `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
   refreshNow(): void {
