@@ -61,6 +61,10 @@ export class App implements OnInit, OnDestroy {
   rightMxSerial = 'SN20241202';
   // PX uses the main serialNumber
 
+  // PX System Events (hours from 07:00 start)
+  // These events affect all machines and trigger cross-chart indicators
+  private pxSystemEvents: { hour: number; type: 'boot' | 'powerCycle'; label: string }[] = [];
+
   // Time displays
   siteTimeShort = '';
   localTimeShort = '';
@@ -182,18 +186,23 @@ export class App implements OnInit, OnDestroy {
     const baseDate = new Date(this.currentDate);
     baseDate.setHours(7, 0, 0, 0); // Start at 07:00
 
-    // Operating window: 07:00 to 20:00 (13 hours = 780 minutes)
-    const operatingWindowMinutes = 13 * 60;
+    // Tests can't start until after PX Power Cycle (07:00), Boot (07:15), and Online (07:30)
+    // First test can start at 07:45
+    const testStartOffset = 45 * 60000; // 45 minutes in ms
+    const testStartTime = baseDate.getTime() + testStartOffset;
+
+    // Operating window: 07:45 to 20:00 (12.25 hours = 735 minutes)
+    const operatingWindowMinutes = 12.25 * 60;
 
     // Track end times for each lane to prevent overlaps
-    const laneEndTimes: number[] = Array(laneCount).fill(baseDate.getTime());
+    const laneEndTimes: number[] = Array(laneCount).fill(testStartTime);
 
-    // Generate random start times spread across the operating window
+    // Generate random start times spread across the operating window (starting at 07:15)
     const startTimes: { time: number; lane: number }[] = [];
     for (let i = 0; i < count; i++) {
       const randomStartMinutes = Math.random() * operatingWindowMinutes;
       startTimes.push({
-        time: baseDate.getTime() + randomStartMinutes * 60000,
+        time: testStartTime + randomStartMinutes * 60000,
         lane: -1 // Will be assigned
       });
     }
@@ -357,6 +366,8 @@ export class App implements OnInit, OnDestroy {
     return {
       tooltip: {
         trigger: 'item',
+        appendToBody: true,
+        confine: false,
         formatter: (params: any) => {
           // Handle workflow bars
           if (params.componentType === 'series' && params.data.workflowData) {
@@ -674,6 +685,69 @@ export class App implements OnInit, OnDestroy {
             }
           },
           z: 1
+        },
+        // PX System Event indicator lines
+        {
+          name: 'PX Events',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const event = this.pxSystemEvents[params.dataIndex];
+            if (!event) return;
+
+            const eventX = api.coord([event.hour, 0]);
+            const yTop = api.coord([0, ALERTS_Y_INDEX]);
+            const yBottom = api.coord([0, 0]);
+            const chartHeight = yBottom[1] - yTop[1] + api.size([0, 1])[1];
+            const color = event.type === 'boot' ? BD_NEBULA : BD_AURORA;
+
+            return {
+              type: 'group',
+              children: [
+                // Invisible hover area
+                {
+                  type: 'rect',
+                  shape: {
+                    x: eventX[0] - 5,
+                    y: yTop[1] - api.size([0, 1])[1] / 2,
+                    width: 10,
+                    height: chartHeight
+                  },
+                  style: {
+                    fill: 'transparent'
+                  },
+                  z: 1
+                },
+                // Vertical line
+                {
+                  type: 'line',
+                  shape: {
+                    x1: eventX[0],
+                    y1: yTop[1] - api.size([0, 1])[1] / 2,
+                    x2: eventX[0],
+                    y2: yTop[1] - api.size([0, 1])[1] / 2 + chartHeight
+                  },
+                  style: {
+                    stroke: color,
+                    lineWidth: 2,
+                    lineDash: [4, 4]
+                  },
+                  z: 1
+                }
+              ]
+            };
+          },
+          data: this.pxSystemEvents.map((e, i) => ({ value: i, event: e })),
+          tooltip: {
+            formatter: (params: any) => {
+              const event = this.pxSystemEvents[params.dataIndex];
+              if (!event) return '';
+              const hour = (7 + event.hour) % 24;
+              const minutes = Math.round((event.hour % 1) * 60);
+              const timeStr = `${Math.floor(hour).toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+              return `<strong>PX ${event.label}</strong><br/>Time: ${timeStr}`;
+            }
+          },
+          z: 1
         }
       ]
     };
@@ -691,6 +765,13 @@ export class App implements OnInit, OnDestroy {
   }
 
   private generateCharts(): void {
+    // Generate PX system events that affect all machines
+    // Sequence: Power Cycle -> Boot -> Online (then tests can start)
+    this.pxSystemEvents = [
+      { hour: 0, type: 'powerCycle', label: 'Power Cycle' },     // 07:00 - power cycle first
+      { hour: 0.25, type: 'boot', label: 'System Boot' },        // 07:15 - boot sequence
+    ];
+
     // Left GX: 10 workflows across 10 lanes
     const leftGxWorkflows = this.generateMockWorkflows(20, 9);
     this.leftGxChartOptions = this.createGanttChart('Left GX', leftGxWorkflows, 9);
@@ -708,16 +789,16 @@ export class App implements OnInit, OnDestroy {
     baseDate.setHours(7, 0, 0, 0); // Start at 07:00 to match other charts
 
     const workflows: DeviceWorkflow[] = [
-      // === Boot sequence at 07:00 ===
+      // === Online workflow at 07:30 (after Power Cycle at 07:00 and Boot at 07:15) ===
       {
-        startTime: new Date(baseDate.getTime()),
+        startTime: new Date(baseDate.getTime() + 30 * 60000), // 07:30
         states: [
-          { timestamp: new Date(baseDate.getTime()), state: 'Powered Off' },
-          { timestamp: new Date(baseDate.getTime() + 30000), state: 'Powered on Starting' },  // +30s
-          { timestamp: new Date(baseDate.getTime() + 45000), state: 'Offline Idle' },         // +45s
-          { timestamp: new Date(baseDate.getTime() + 60000), state: 'Offline Starting' },     // +1m
-          { timestamp: new Date(baseDate.getTime() + 90000), state: 'Online Pause Idle' },    // +1.5m
-          { timestamp: new Date(baseDate.getTime() + 120000), state: 'Online' },              // +2m
+          { timestamp: new Date(baseDate.getTime() + 30 * 60000), state: 'Powered Off' },
+          { timestamp: new Date(baseDate.getTime() + 30 * 60000 + 30000), state: 'Powered on Starting' },  // +30s
+          { timestamp: new Date(baseDate.getTime() + 30 * 60000 + 45000), state: 'Offline Idle' },         // +45s
+          { timestamp: new Date(baseDate.getTime() + 30 * 60000 + 60000), state: 'Offline Starting' },     // +1m
+          { timestamp: new Date(baseDate.getTime() + 30 * 60000 + 90000), state: 'Online Pause Idle' },    // +1.5m
+          { timestamp: new Date(baseDate.getTime() + 30 * 60000 + 120000), state: 'Online' },              // +2m
         ]
       },
     ];
@@ -839,6 +920,8 @@ export class App implements OnInit, OnDestroy {
     return {
       tooltip: {
         trigger: 'item',
+        appendToBody: true,
+        confine: false,
         formatter: (params: any) => {
           // Handle alert dots
           if (params.seriesName === 'Alerts' && params.data.alert) {
@@ -1085,6 +1168,77 @@ export class App implements OnInit, OnDestroy {
             }
           },
           z: 2
+        },
+        // PX System Events (Boot, Power Cycle) markers on Device State lane
+        {
+          name: 'PX System Events',
+          type: 'scatter',
+          data: this.pxSystemEvents.map(event => ({
+            value: [event.hour, DEVICE_STATE_Y],
+            event: event
+          })),
+          symbol: (value: any, params: any) => {
+            const event = params.data?.event;
+            return event?.type === 'boot' ? 'triangle' : 'circle';
+          },
+          symbolSize: 16,
+          itemStyle: {
+            color: (params: any) => {
+              const event = params.data?.event;
+              return event?.type === 'boot' ? BD_NEBULA : BD_AURORA;
+            },
+            borderColor: '#fff',
+            borderWidth: 2
+          },
+          emphasis: {
+            scale: 1.5
+          },
+          tooltip: {
+            formatter: (params: any) => {
+              const event = params.data?.event;
+              if (!event) return '';
+              const hour = (7 + event.hour) % 24;
+              const minutes = Math.round((event.hour % 1) * 60);
+              const timeStr = `${Math.floor(hour).toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+              const typeLabel = event.type === 'boot' ? 'Boot' : 'Power Cycle';
+              return `<strong>PX ${typeLabel}</strong><br/>Time: ${timeStr}<br/>${event.label}`;
+            }
+          },
+          z: 3
+        },
+        // PX System Event indicator lines (matching GX/MX charts)
+        {
+          name: 'PX Event Lines',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const event = this.pxSystemEvents[params.dataIndex];
+            if (!event) return;
+
+            const eventX = api.coord([event.hour, 0]);
+            const yTop = api.coord([0, 2]);
+            const yBottom = api.coord([0, 0]);
+            const chartHeight = yBottom[1] - yTop[1] + 30;
+            const color = event.type === 'boot' ? BD_NEBULA : BD_AURORA;
+
+            return {
+              type: 'line',
+              shape: {
+                x1: eventX[0],
+                y1: yTop[1] - 15,
+                x2: eventX[0],
+                y2: yTop[1] - 15 + chartHeight
+              },
+              style: {
+                stroke: color,
+                lineWidth: 2,
+                lineDash: [4, 4]
+              },
+              z: 1
+            };
+          },
+          data: this.pxSystemEvents.map((e, i) => i),
+          silent: true,
+          z: 1
         },
         {
           name: 'Heartbeat',
