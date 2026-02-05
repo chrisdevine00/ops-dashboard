@@ -342,7 +342,8 @@ export class App implements OnInit, OnDestroy {
             time: alertTime,
             severity: severity,
             workflow: workflow.name,
-            acronym: workflow.acronym
+            acronym: workflow.acronym,
+            code: this.generateAlertCode()
           }
         });
       }
@@ -358,7 +359,8 @@ export class App implements OnInit, OnDestroy {
           time: alertTime,
           severity: 'info',
           workflow: 'System',
-          acronym: 'SYS'
+          acronym: 'SYS',
+          code: this.generateAlertCode()
         }
       });
     }
@@ -394,6 +396,7 @@ export class App implements OnInit, OnDestroy {
             return `
               <div style="min-width: 180px;">
                 <strong>Alert</strong><br/>
+                <strong>Code:</strong> ${alert.code}<br/>
                 <strong>Time:</strong> ${timeStr}<br/>
                 <strong>Severity:</strong> <span style="color: ${severityColor}; font-weight: bold;">${alert.severity.toUpperCase()}</span><br/>
                 <strong>Workflow:</strong> ${alert.workflow} (${alert.acronym})
@@ -807,11 +810,15 @@ export class App implements OnInit, OnDestroy {
   }
 
   // Store alerts for cross-chart reference
-  private gxAlerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] = [];
-  private mxAlerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] = [];
+  private gxAlerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string; code: string }[] = [];
+  private mxAlerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string; code: string }[] = [];
 
-  private generateMockPxAlerts(): { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] {
-    const alerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string }[] = [];
+  private generateAlertCode(): string {
+    return Math.floor(10000 + Math.random() * 90000).toString();
+  }
+
+  private generateMockPxAlerts(): { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string; code: string }[] {
+    const alerts: { timestamp: Date; severity: 'warning' | 'error' | 'info'; source: string; message: string; code: string }[] = [];
     const baseDate = new Date(this.currentDate);
     baseDate.setHours(7, 0, 0, 0);
 
@@ -830,7 +837,8 @@ export class App implements OnInit, OnDestroy {
       timestamp: new Date(baseDate.getTime() + a.minutesFromStart * 60000),
       severity: a.severity,
       source: a.source,
-      message: a.message
+      message: a.message,
+      code: this.generateAlertCode()
     }));
 
     // MX-referenced alerts
@@ -841,7 +849,8 @@ export class App implements OnInit, OnDestroy {
       timestamp: new Date(baseDate.getTime() + a.minutesFromStart * 60000),
       severity: a.severity,
       source: a.source,
-      message: a.message
+      message: a.message,
+      code: this.generateAlertCode()
     }));
 
     // Combine all alerts
@@ -850,7 +859,8 @@ export class App implements OnInit, OnDestroy {
         timestamp: new Date(baseDate.getTime() + minutesFromStart * 60000),
         severity,
         source,
-        message
+        message,
+        code: this.generateAlertCode()
       });
     });
 
@@ -932,6 +942,7 @@ export class App implements OnInit, OnDestroy {
             return `
               <div style="min-width: 200px;">
                 <strong>Alert</strong><br/>
+                <strong>Code:</strong> ${alert.code}<br/>
                 <strong>Time:</strong> ${timeStr}<br/>
                 <strong>Source:</strong> ${alert.source}<br/>
                 <strong>Severity:</strong> <span style="color: ${severityColor}; font-weight: bold;">${alert.severity.toUpperCase()}</span><br/>

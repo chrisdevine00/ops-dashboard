@@ -9,12 +9,14 @@
 
   .home-button {
     color: inherit;
+    margin: 0 4px;
   }
 
   .title {
     font-size: 0.9rem;
     font-weight: 500;
     white-space: nowrap;
+    padding: 0 8px;
   }
 
   .header-divider {
@@ -55,7 +57,9 @@
       }
 
       .calendar-icon {
-        opacity: 0.8;
+        opacity: 0.9;
+        display: inline-flex;
+        align-items: center;
       }
     }
 
