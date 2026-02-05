@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SystemsService } from '../../../../core/services/systems.service';
-import { System } from '../../../../core/models/system.model';
+import { SystemsService } from '../../../../../core/services/systems.service';
+import { System } from '../../../../../core/models/system.model';
 
 // BD Brand Colors
 const BD_BLUE = '#0446ED';       // Reserved for UI chrome
@@ -123,7 +123,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   goHome(): void {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/compact/home']);
   }
 
   private startClockTimer(): void {

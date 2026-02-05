@@ -1,0 +1,36 @@
+<div class="picker-container">
+  <h1 class="picker-title">Operations Dashboard</h1>
+  <p class="picker-subtitle">Select a layout option to preview</p>
+
+  <div class="layout-options">
+    <a routerLink="/full/home" class="layout-card">
+      <div class="layout-preview full-preview">
+        <div class="preview-header"></div>
+        <div class="preview-content">
+          <div class="preview-chart tall"></div>
+          <div class="preview-chart tall"></div>
+          <div class="preview-chart short"></div>
+        </div>
+      </div>
+      <div class="layout-info">
+        <h2>Full Layout</h2>
+        <p>Standard view with larger charts and more spacing. Optimized for individual workstation use.</p>
+      </div>
+    </a>
+
+    <a routerLink="/compact/home" class="layout-card">
+      <div class="layout-preview compact-preview">
+        <div class="preview-header small"></div>
+        <div class="preview-content stacked">
+          <div class="preview-chart"></div>
+          <div class="preview-chart"></div>
+          <div class="preview-chart small"></div>
+        </div>
+      </div>
+      <div class="layout-info">
+        <h2>Compact Layout</h2>
+        <p>Dense view optimized for control room displays. Fits 4-up on 1920x1080 screens.</p>
+      </div>
+    </a>
+  </div>
+</div>

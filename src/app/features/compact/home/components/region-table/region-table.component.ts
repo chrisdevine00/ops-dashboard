@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { System } from '../../../../core/models/system.model';
+import { System } from '../../../../../core/models/system.model';
 
 @Component({
   selector: 'app-region-table',

@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { SystemsService } from '../../../../core/services/systems.service';
-import { SystemsByRegion } from '../../../../core/models/system.model';
+import { SystemsService } from '../../../../../core/services/systems.service';
+import { SystemsByRegion } from '../../../../../core/models/system.model';
 
 @Component({
   selector: 'app-home',

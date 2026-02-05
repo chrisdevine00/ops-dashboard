@@ -1,0 +1,99 @@
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0 8px;
+  min-height: 48px;
+  gap: 0;
+
+  .home-button {
+    color: inherit;
+    margin: 0 4px;
+  }
+
+  .header-divider {
+    width: 1px;
+    height: 28px;
+    background-color: rgba(255, 255, 255, 0.25);
+    margin: 0 12px;
+  }
+
+  .title {
+    font-size: 1rem;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0 8px;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+
+    .search-field {
+      width: 280px;
+
+      ::ng-deep {
+        .mat-mdc-form-field-subscript-wrapper {
+          display: none;
+        }
+
+        .mat-mdc-text-field-wrapper {
+          background-color: rgba(255, 255, 255, 0.15);
+          border-radius: 4px;
+        }
+
+        .mat-mdc-form-field-flex {
+          height: 36px;
+          align-items: center;
+        }
+
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+        .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+        .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+          border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        input.mat-mdc-input-element {
+          color: white;
+          font-size: 0.875rem;
+
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+          }
+        }
+      }
+    }
+
+    .search-icon {
+      color: rgba(255, 255, 255, 0.7);
+      margin-right: 8px;
+    }
+  }
+}
+
+.container {
+  padding: 24px;
+  max-width: 1800px;
+  margin: 0 auto;
+
+  .no-results {
+    text-align: center;
+    padding: 48px 24px;
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 0.875rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}

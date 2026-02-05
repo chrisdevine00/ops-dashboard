@@ -1,0 +1,37 @@
+<mat-toolbar color="primary" class="toolbar">
+  <!-- Home -->
+  <button mat-icon-button class="home-button" title="Home" routerLink="/full/home">
+    <lucide-icon name="home" [size]="20"></lucide-icon>
+  </button>
+
+  <div class="header-divider"></div>
+
+  <!-- Title -->
+  <span class="title">Operations Dashboard</span>
+
+  <div class="header-divider"></div>
+
+  <!-- Search -->
+  <div class="search-container">
+    <mat-form-field appearance="outline" class="search-field">
+      <input matInput
+             [formControl]="searchControl"
+             placeholder="Search by serial number...">
+      <lucide-icon matSuffix name="search" [size]="16" class="search-icon"></lucide-icon>
+    </mat-form-field>
+  </div>
+
+  <span class="spacer"></span>
+</mat-toolbar>
+
+<div class="container">
+  <app-region-table
+    *ngFor="let group of systemsByRegion"
+    [region]="group.region"
+    [systems]="group.systems">
+  </app-region-table>
+
+  <div *ngIf="systemsByRegion.length === 0" class="no-results">
+    No systems found matching your search.
+  </div>
+</div>
