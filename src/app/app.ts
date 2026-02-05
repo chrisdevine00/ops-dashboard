@@ -419,21 +419,21 @@ export class App implements OnInit, OnDestroy {
         left: 80,
         right: '2%',
         top: 8,
-        bottom: 30,
+        bottom: 40,
         containLabel: false
       },
       xAxis: {
         type: 'value',
         min: 0,
         max: 24,
-        interval: 2,
+        interval: 1,
         axisLabel: {
           formatter: (value: number) => {
             const hour = (7 + value) % 24;
             return `${hour.toString().padStart(2, '0')}:00`;
           },
-          rotate: 0,
-          fontSize: 8
+          rotate: 45,
+          fontSize: 10
         },
         splitLine: {
           show: true,
@@ -450,7 +450,7 @@ export class App implements OnInit, OnDestroy {
         type: 'category',
         data: yAxisLabels,
         axisLabel: {
-          fontSize: 8,
+          fontSize: 10,
           color: '#060A3D'
         },
         axisLine: {
@@ -996,21 +996,21 @@ export class App implements OnInit, OnDestroy {
         left: 80,
         right: '2%',
         top: 4,
-        bottom: 20,
+        bottom: 35,
         containLabel: false
       },
       xAxis: {
         type: 'value',
         min: 0,
         max: 24, // 24 hours from 18:00 to 18:00 next day
-        interval: 2,
+        interval: 1,
         axisLabel: {
           formatter: (value: number) => {
             const hour = (7 + value) % 24;
             return `${hour.toString().padStart(2, '0')}:00`;
           },
-          fontSize: 8,
-          rotate: 0
+          fontSize: 10,
+          rotate: 45
         },
         splitLine: {
           show: true,
@@ -1027,7 +1027,7 @@ export class App implements OnInit, OnDestroy {
         type: 'category',
         data: ['Device State', '', 'Alerts & Errors'],
         axisLabel: {
-          fontSize: 8,
+          fontSize: 10,
           color: '#060A3D',
           fontWeight: 500
         },
