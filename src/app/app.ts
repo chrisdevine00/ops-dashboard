@@ -290,7 +290,7 @@ export class App implements OnInit, OnDestroy {
     ];
   }
 
-  private createGanttChart(title: string, workflows: WorkflowTask[], laneCount: number, customLabels?: string[]): EChartsOption {
+  private createGanttChart(title: string, workflows: WorkflowTask[], laneCount: number, customLabels?: string[], showXAxis: boolean = true): EChartsOption {
     const baseDate = new Date(this.currentDate);
     baseDate.setHours(7, 0, 0, 0);
 
@@ -419,7 +419,7 @@ export class App implements OnInit, OnDestroy {
         left: 80,
         right: '2%',
         top: 8,
-        bottom: 40,
+        bottom: showXAxis ? 40 : 8,
         containLabel: false
       },
       xAxis: {
@@ -428,12 +428,16 @@ export class App implements OnInit, OnDestroy {
         max: 24,
         interval: 1,
         axisLabel: {
+          show: showXAxis,
           formatter: (value: number) => {
             const hour = (7 + value) % 24;
             return `${hour.toString().padStart(2, '0')}:00`;
           },
           rotate: 45,
           fontSize: 10
+        },
+        axisTick: {
+          show: showXAxis
         },
         splitLine: {
           show: true,
@@ -780,13 +784,13 @@ export class App implements OnInit, OnDestroy {
       { hour: 0.25, type: 'boot', label: 'System Boot' },        // 07:15 - boot sequence
     ];
 
-    // Left GX: HPV tests only across 9 lanes
+    // Left GX: HPV tests only across 9 lanes (no x-axis, shared at bottom)
     const leftGxWorkflows = this.generateMockWorkflows(20, 9, ['HPV']);
-    this.leftGxChartOptions = this.createGanttChart('Left GX', leftGxWorkflows, 9);
+    this.leftGxChartOptions = this.createGanttChart('Left GX', leftGxWorkflows, 9, undefined, false);
 
-    // Right MX: workflows across 9 lanes
+    // Right MX: workflows across 9 lanes (no x-axis, shared at bottom)
     const rightMxWorkflows = this.generateMockWorkflows(20, 9);
-    this.rightMxChartOptions = this.createGanttChart('Right MX', rightMxWorkflows, 9);
+    this.rightMxChartOptions = this.createGanttChart('Right MX', rightMxWorkflows, 9, undefined, false);
 
     // PX: State transition timeline chart
     this.pxChartOptions = this.createStateTransitionChart();
@@ -891,9 +895,9 @@ export class App implements OnInit, OnDestroy {
     const baseDate = new Date(this.currentDate);
     baseDate.setHours(7, 0, 0, 0); // Timeline starts at 18:00
 
-    // Simple Y-axis layout: Device State at 0, Alerts at 2
+    // Simple Y-axis layout: Device State at 0, Alerts at 1
     const DEVICE_STATE_Y = 0;
-    const ALERTS_Y = 2;
+    const ALERTS_Y = 1;
 
     // Create scatter data for workflow dots (one dot per workflow at start time)
     const workflowDotsData = workflows.map((workflow, index) => {
@@ -995,7 +999,7 @@ export class App implements OnInit, OnDestroy {
       grid: {
         left: 80,
         right: '2%',
-        top: 4,
+        top: 8,
         bottom: 35,
         containLabel: false
       },
@@ -1025,7 +1029,7 @@ export class App implements OnInit, OnDestroy {
       },
       yAxis: {
         type: 'category',
-        data: ['Device State', '', 'Alerts & Errors'],
+        data: ['Device State', 'Alerts & Errors'],
         axisLabel: {
           fontSize: 10,
           color: '#060A3D',
@@ -1051,9 +1055,10 @@ export class App implements OnInit, OnDestroy {
 
             const xStart = api.coord([item.startHour, 0]);
             const xEnd = api.coord([item.endHour, 0]);
-            const yTop = api.coord([0, 2]);
+            const yTop = api.coord([0, 1]);
             const yBottom = api.coord([0, 0]);
-            const chartHeight = yBottom[1] - yTop[1] + 30;
+            const laneHeight = api.size([0, 1])[1];
+            const chartHeight = yBottom[1] - yTop[1] + laneHeight;
 
             return {
               type: 'group',
@@ -1063,7 +1068,7 @@ export class App implements OnInit, OnDestroy {
                   type: 'rect',
                   shape: {
                     x: xStart[0],
-                    y: yTop[1] - 15,
+                    y: yTop[1] - laneHeight / 2,
                     width: xEnd[0] - xStart[0],
                     height: chartHeight
                   },
@@ -1077,9 +1082,9 @@ export class App implements OnInit, OnDestroy {
                   type: 'line',
                   shape: {
                     x1: xStart[0],
-                    y1: yTop[1] - 15,
+                    y1: yTop[1] - laneHeight / 2,
                     x2: xStart[0],
-                    y2: yTop[1] - 15 + chartHeight
+                    y2: yTop[1] - laneHeight / 2 + chartHeight
                   },
                   style: {
                     stroke: 'rgba(128, 128, 128, 0.6)',
@@ -1093,9 +1098,9 @@ export class App implements OnInit, OnDestroy {
                   type: 'line',
                   shape: {
                     x1: xEnd[0],
-                    y1: yTop[1] - 15,
+                    y1: yTop[1] - laneHeight / 2,
                     x2: xEnd[0],
-                    y2: yTop[1] - 15 + chartHeight
+                    y2: yTop[1] - laneHeight / 2 + chartHeight
                   },
                   style: {
                     stroke: 'rgba(128, 128, 128, 0.6)',
@@ -1115,17 +1120,16 @@ export class App implements OnInit, OnDestroy {
           name: 'AlertsBackground',
           type: 'custom',
           renderItem: (params: any, api: any) => {
-            const yStart = api.coord([0, 2]);
-            const yEnd = api.coord([0, 2]);
+            const yPos = api.coord([0, 1]);
             const xStart = api.coord([0, 0]);
             const xEnd = api.coord([24, 0]);
-            const height = 30;
+            const height = api.size([0, 1])[1]; // Dynamic lane height
 
             return {
               type: 'rect',
               shape: {
                 x: xStart[0],
-                y: yStart[1] - height / 2,
+                y: yPos[1] - height / 2,
                 width: xEnd[0] - xStart[0],
                 height: height
               },
@@ -1138,46 +1142,18 @@ export class App implements OnInit, OnDestroy {
           data: [0],
           silent: true
         },
-        // Divider line between alerts and device state
-        {
-          name: 'Divider',
-          type: 'custom',
-          renderItem: (params: any, api: any) => {
-            const y = api.coord([0, 1]);
-            const xStart = api.coord([0, 0]);
-            const xEnd = api.coord([24, 0]);
-
-            return {
-              type: 'line',
-              shape: {
-                x1: xStart[0],
-                y1: y[1],
-                x2: xEnd[0],
-                y2: y[1]
-              },
-              style: {
-                stroke: BD_GRAY,
-                lineWidth: 1,
-                lineDash: [4, 4]
-              },
-              z: 0
-            };
-          },
-          data: [0],
-          silent: true
-        },
         {
           name: 'Device State',
           type: 'scatter',
           data: workflowDotsData,
-          symbolSize: 14,
+          symbolSize: 12,
           itemStyle: {
             color: BD_NEBULA_DARK,
             borderColor: '#fff',
             borderWidth: 2
           },
           emphasis: {
-            scale: 1.5,
+            scale: 1.3,
             itemStyle: {
               shadowBlur: 10,
               shadowColor: 'rgba(0, 168, 143, 0.5)'
@@ -1197,7 +1173,7 @@ export class App implements OnInit, OnDestroy {
             const event = params.data?.event;
             return event?.type === 'boot' ? 'triangle' : 'circle';
           },
-          symbolSize: 16,
+          symbolSize: 14,
           itemStyle: {
             color: (params: any) => {
               const event = params.data?.event;
@@ -1231,18 +1207,19 @@ export class App implements OnInit, OnDestroy {
             if (!event) return;
 
             const eventX = api.coord([event.hour, 0]);
-            const yTop = api.coord([0, 2]);
+            const yTop = api.coord([0, 1]);
             const yBottom = api.coord([0, 0]);
-            const chartHeight = yBottom[1] - yTop[1] + 30;
+            const laneHeight = api.size([0, 1])[1];
+            const chartHeight = yBottom[1] - yTop[1] + laneHeight;
             const color = event.type === 'boot' ? BD_NEBULA : BD_AURORA;
 
             return {
               type: 'line',
               shape: {
                 x1: eventX[0],
-                y1: yTop[1] - 15,
+                y1: yTop[1] - laneHeight / 2,
                 x2: eventX[0],
-                y2: yTop[1] - 15 + chartHeight
+                y2: yTop[1] - laneHeight / 2 + chartHeight
               },
               style: {
                 stroke: color,
@@ -1275,7 +1252,7 @@ export class App implements OnInit, OnDestroy {
           name: 'Alerts',
           type: 'scatter',
           data: alertData,
-          symbolSize: 12,
+          symbolSize: 10,
           symbol: 'diamond',
           z: 3
         },
@@ -1285,9 +1262,10 @@ export class App implements OnInit, OnDestroy {
           type: 'custom',
           renderItem: (params: any, api: any) => {
             const midnightX = api.coord([17, 0]); // 17 hours from 07:00 = midnight
-            const yTop = api.coord([0, 2]);
+            const yTop = api.coord([0, 1]);
             const yBottom = api.coord([0, 0]);
-            const chartHeight = yBottom[1] - yTop[1] + 30;
+            const laneHeight = api.size([0, 1])[1];
+            const chartHeight = yBottom[1] - yTop[1] + laneHeight;
 
             return {
               type: 'group',
@@ -1297,7 +1275,7 @@ export class App implements OnInit, OnDestroy {
                   type: 'rect',
                   shape: {
                     x: midnightX[0] - 5,
-                    y: yTop[1] - 15,
+                    y: yTop[1] - laneHeight / 2,
                     width: 10,
                     height: chartHeight
                   },
@@ -1311,9 +1289,9 @@ export class App implements OnInit, OnDestroy {
                   type: 'line',
                   shape: {
                     x1: midnightX[0],
-                    y1: yTop[1] - 15,
+                    y1: yTop[1] - laneHeight / 2,
                     x2: midnightX[0],
-                    y2: yTop[1] - 15 + chartHeight
+                    y2: yTop[1] - laneHeight / 2 + chartHeight
                   },
                   style: {
                     stroke: '#aaa',
