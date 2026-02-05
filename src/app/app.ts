@@ -56,6 +56,11 @@ export class App implements OnInit, OnDestroy {
   facilityName = 'Main Laboratory';
   serialNumber = 'SN20240847';
 
+  // Machine serial numbers
+  leftGxSerial = 'SN20241201';
+  rightMxSerial = 'SN20241202';
+  // PX uses the main serialNumber
+
   // Time displays
   siteTimeShort = '';
   localTimeShort = '';
@@ -360,16 +365,6 @@ export class App implements OnInit, OnDestroy {
     }
 
     return {
-      title: {
-        text: title,
-        left: '2%',
-        top: 10,
-        textStyle: {
-          fontSize: 18,
-          fontWeight: 500,
-          color: '#060A3D'
-        }
-      },
       tooltip: {
         trigger: 'item',
         formatter: (params: any) => {
@@ -414,7 +409,7 @@ export class App implements OnInit, OnDestroy {
       grid: {
         left: 120,
         right: '3%',
-        top: '12%',
+        top: '5%',
         bottom: '10%',
         containLabel: false
       },
@@ -788,16 +783,6 @@ export class App implements OnInit, OnDestroy {
     const formatTimeFn = this.formatTime.bind(this);
 
     return {
-      title: {
-        text: 'PX',
-        left: '2%',
-        top: 10,
-        textStyle: {
-          fontSize: 18,
-          fontWeight: 500,
-          color: '#060A3D'
-        }
-      },
       tooltip: {
         trigger: 'item',
         formatter: (params: any) => {
@@ -857,8 +842,8 @@ export class App implements OnInit, OnDestroy {
       grid: {
         left: 120,
         right: '3%',
-        top: '20%',
-        bottom: '25%',
+        top: '10%',
+        bottom: '20%',
         containLabel: false
       },
       xAxis: {

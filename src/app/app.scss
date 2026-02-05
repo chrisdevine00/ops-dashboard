@@ -97,7 +97,7 @@
   padding: 24px;
   max-width: 1800px;
   margin: 0 auto;
-  background-color: #fafafa;
+  background-color: #e8e8e8;
   min-height: calc(100vh - 64px);
 
   h1 {
@@ -169,9 +169,31 @@
 .chart-card {
   margin-bottom: 24px;
   transition: box-shadow 0.2s ease;
+  overflow: hidden;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+    .chart-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    .chart-serial {
+      font-size: 0.75rem;
+      font-family: 'Roboto Mono', monospace;
+      color: rgba(0, 0, 0, 0.6);
+    }
   }
 
   mat-card-header {
