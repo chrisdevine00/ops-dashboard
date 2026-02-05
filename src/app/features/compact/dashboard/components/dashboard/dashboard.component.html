@@ -70,6 +70,7 @@
   <button mat-icon-button (click)="refreshNow()" [title]="'Refresh now'" class="refresh-button">
     <lucide-icon name="refresh-cw" [size]="14"></lucide-icon>
   </button>
+
 </mat-toolbar>
 
 <div class="container">
@@ -105,3 +106,8 @@
     </mat-card-content>
   </mat-card>
 </div>
+
+<!-- Layout Toggle FAB -->
+<button mat-fab class="layout-fab" title="Switch to Full Layout" [routerLink]="['/full/system', serialNumber]">
+  <lucide-icon name="maximize-2" [size]="24"></lucide-icon>
+</button>

@@ -97,3 +97,16 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 }
+
+.layout-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}

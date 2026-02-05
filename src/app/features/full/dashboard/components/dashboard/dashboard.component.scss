@@ -195,3 +195,16 @@
     font-size: 2rem;
   }
 }
+
+.layout-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}

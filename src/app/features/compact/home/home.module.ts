@@ -14,7 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 // Lucide Icons
-import { LucideAngularModule, Search, Home } from 'lucide-angular';
+import { LucideAngularModule, Search, Home, Maximize2 } from 'lucide-angular';
 
 // Components
 import { HomeComponent } from './components/home/home.component';
@@ -43,7 +43,7 @@ const routes: Routes = [
     MatInputModule,
     MatFormFieldModule,
     // Lucide
-    LucideAngularModule.pick({ Search, Home })
+    LucideAngularModule.pick({ Search, Home, Maximize2 })
   ]
 })
 export class HomeModule { }

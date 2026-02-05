@@ -13,7 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 
 // Lucide Icons
-import { LucideAngularModule, Home, RefreshCw, ChevronLeft, ChevronRight, Calendar } from 'lucide-angular';
+import { LucideAngularModule, Home, RefreshCw, ChevronLeft, ChevronRight, Calendar, Maximize2 } from 'lucide-angular';
 
 // ECharts
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -42,7 +42,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatNativeDateModule,
     // Lucide
-    LucideAngularModule.pick({ Home, RefreshCw, ChevronLeft, ChevronRight, Calendar }),
+    LucideAngularModule.pick({ Home, RefreshCw, ChevronLeft, ChevronRight, Calendar, Maximize2 }),
     // ECharts
     NgxEchartsModule.forChild()
   ]
