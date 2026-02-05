@@ -67,11 +67,6 @@ export class App implements OnInit, OnDestroy {
   private readonly siteTimezone = 'Europe/London';  // UTC+0/+1
   private clockTimer: any;
 
-  // Metrics
-  activeWorkflows = 0;
-  completedToday = 0;
-  avgWorkflowTime = 0;
-  alertsGenerated = 0;
 
   // Date navigation
   currentDate: Date = new Date();
@@ -100,7 +95,6 @@ export class App implements OnInit, OnDestroy {
     this.updateClocks();
     this.startClockTimer();
     this.generateCharts();
-    this.updateMetrics();
     this.startRefreshTimer();
   }
 
@@ -146,21 +140,18 @@ export class App implements OnInit, OnDestroy {
     this.currentDate = new Date(this.currentDate.getTime() + 24 * 60 * 60 * 1000);
     this.updateFormattedDate();
     this.generateCharts();
-    this.updateMetrics();
   }
 
   prevDay(): void {
     this.currentDate = new Date(this.currentDate.getTime() - 24 * 60 * 60 * 1000);
     this.updateFormattedDate();
     this.generateCharts();
-    this.updateMetrics();
   }
 
   goToToday(): void {
     this.currentDate = new Date();
     this.updateFormattedDate();
     this.generateCharts();
-    this.updateMetrics();
   }
 
   onDateChange(event: any): void {
@@ -168,8 +159,7 @@ export class App implements OnInit, OnDestroy {
       this.currentDate = event.value;
       this.updateFormattedDate();
       this.generateCharts();
-      this.updateMetrics();
-    }
+      }
   }
 
   private generateMockWorkflows(count: number, laneCount: number): WorkflowTask[] {
@@ -1059,14 +1049,6 @@ export class App implements OnInit, OnDestroy {
     };
   }
 
-  private updateMetrics(): void {
-    // Mock metrics based on workflows
-    this.activeWorkflows = Math.floor(Math.random() * 8) + 2;
-    this.completedToday = Math.floor(Math.random() * 40) + 20;
-    this.avgWorkflowTime = Math.floor(Math.random() * 60) + 90; // 90-150 minutes
-    this.alertsGenerated = Math.floor(Math.random() * 5) + 1;
-  }
-
   private startRefreshTimer(): void {
     this.refreshCountdown = this.REFRESH_INTERVAL;
     this.updateRefreshText();
@@ -1092,7 +1074,6 @@ export class App implements OnInit, OnDestroy {
     this.refreshCountdown = this.REFRESH_INTERVAL;
     this.updateRefreshText();
     this.generateCharts();
-    this.updateMetrics();
   }
 
   ngOnDestroy(): void {

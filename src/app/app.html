@@ -104,47 +104,4 @@
       <div echarts [options]="pxChartOptions" class="state-chart"></div>
     </mat-card-content>
   </mat-card>
-
-  <!-- Workflow Metrics -->
-  <div class="metrics-grid">
-    <mat-card class="metric-card">
-      <mat-card-header>
-        <mat-card-title>Active Workflows</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="metric-value">{{ activeWorkflows }}</div>
-        <div class="metric-unit">running</div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="metric-card">
-      <mat-card-header>
-        <mat-card-title>Completed Today</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="metric-value">{{ completedToday }}</div>
-        <div class="metric-unit">workflows</div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="metric-card">
-      <mat-card-header>
-        <mat-card-title>Avg Workflow Time</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="metric-value">{{ avgWorkflowTime }}</div>
-        <div class="metric-unit">minutes</div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="metric-card">
-      <mat-card-header>
-        <mat-card-title>Alerts Generated</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="metric-value">{{ alertsGenerated }}</div>
-        <div class="metric-unit">today</div>
-      </mat-card-content>
-    </mat-card>
-  </div>
 </div>
