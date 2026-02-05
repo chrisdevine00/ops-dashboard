@@ -24,6 +24,11 @@ const routes: Routes = [
     path: 'full/system/:serialNumber',
     loadChildren: () => import('./features/full/dashboard/dashboard.module').then(m => m.FullDashboardModule)
   },
+  // Style Guide (developer documentation)
+  {
+    path: 'style-guide',
+    loadChildren: () => import('./features/style-guide/style-guide.module').then(m => m.StyleGuideModule)
+  },
   { path: '**', redirectTo: '' }
 ];
 

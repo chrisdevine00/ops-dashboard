@@ -1,5 +1,7 @@
 <div class="picker-container">
   <h1 class="picker-title">Operations Dashboard</h1>
+  <p class="tech-stack">Angular 19 | Angular Material | Apache ECharts | Lucide Icons | Lazy-loaded Modules | RxJS</p>
+  <hr class="divider">
   <p class="picker-subtitle">Select a layout option to preview</p>
 
   <div class="layout-options">
@@ -15,6 +17,13 @@
       <div class="layout-info">
         <h2>Full Layout</h2>
         <p>Standard view with larger charts and more spacing. Optimized for individual workstation use.</p>
+        <ul class="feature-list">
+          <li>48px toolbar height</li>
+          <li>Fixed chart heights (500px / 150px)</li>
+          <li>Independent x-axis per chart</li>
+          <li>24px container padding</li>
+          <li>Scrollable content area</li>
+        </ul>
       </div>
     </a>
 
@@ -30,7 +39,18 @@
       <div class="layout-info">
         <h2>Compact Layout</h2>
         <p>Dense view optimized for control room displays. Fits 4-up on 1920x1080 screens.</p>
+        <ul class="feature-list">
+          <li>40px toolbar height</li>
+          <li>Flex-based chart heights (fill viewport)</li>
+          <li>Shared x-axis across charts</li>
+          <li>12px container padding</li>
+          <li>No scroll (fixed to viewport)</li>
+        </ul>
       </div>
     </a>
   </div>
+
+  <a routerLink="/style-guide" class="style-guide-link">
+    View Style Guide & Design Tokens
+  </a>
 </div>

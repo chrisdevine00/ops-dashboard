@@ -1,0 +1,871 @@
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0 16px;
+  min-height: 56px;
+  gap: 16px;
+
+  .title {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    font-weight: 400;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .version {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    font-family: 'Roboto Mono', monospace;
+  }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #fafafa;
+  min-height: calc(100vh - 56px);
+}
+
+.tab-content {
+  padding: 32px;
+}
+
+// ==========================================
+// SECTIONS
+// ==========================================
+.section {
+  margin-bottom: 48px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #060A3D;
+  margin: 0 0 8px 0;
+}
+
+.section-description {
+  font-size: 0.9375rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0 0 24px 0;
+  max-width: 700px;
+  line-height: 1.6;
+
+  strong {
+    color: rgba(0, 0, 0, 0.87);
+  }
+}
+
+.group-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.87);
+  margin: 24px 0 8px 0;
+}
+
+.group-description {
+  font-size: 0.8125rem;
+  color: rgba(0, 0, 0, 0.54);
+  margin: 0 0 16px 0;
+}
+
+// ==========================================
+// COLOR SWATCHES
+// ==========================================
+.color-group {
+  margin-bottom: 32px;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.color-swatch {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  .swatch {
+    height: 80px;
+  }
+
+  .swatch-info {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .swatch-name {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  .swatch-variable {
+    font-size: 0.75rem;
+    color: #0446ED;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .swatch-hex {
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.54);
+    font-family: 'Roboto Mono', monospace;
+  }
+
+  .swatch-usage {
+    font-size: 0.6875rem;
+    color: rgba(0, 0, 0, 0.45);
+    font-style: italic;
+  }
+}
+
+// Color Ramp (horizontal strip)
+.color-ramp {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ramp-swatch {
+  flex: 1;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+
+  &:hover {
+    transform: scaleY(1.1);
+    z-index: 1;
+  }
+
+  .ramp-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+    &.dark-text {
+      color: rgba(0, 0, 0, 0.7);
+      text-shadow: none;
+    }
+  }
+}
+
+// Status Colors
+.status-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  .status-swatch {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .status-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    strong {
+      font-size: 0.9375rem;
+    }
+
+    code {
+      font-size: 0.75rem;
+      color: #0446ED;
+    }
+
+    span {
+      font-size: 0.8125rem;
+      color: rgba(0, 0, 0, 0.54);
+    }
+  }
+}
+
+// ==========================================
+// TYPOGRAPHY
+// ==========================================
+.typography-group {
+  margin-bottom: 32px;
+}
+
+.font-families {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.font-family-item {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  .font-sample {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  .font-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.8125rem;
+
+    strong {
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    code {
+      color: #0446ED;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .font-value {
+      color: rgba(0, 0, 0, 0.54);
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.font-sizes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.font-size-item {
+  display: grid;
+  grid-template-columns: 80px 60px 1fr 100px;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: white;
+  border-radius: 4px;
+
+  .size-sample {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  .size-name {
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .size-variable {
+    font-size: 0.75rem;
+    color: #0446ED;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .size-value {
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.54);
+    font-family: 'Roboto Mono', monospace;
+    text-align: right;
+  }
+}
+
+.font-weights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.font-weight-item {
+  background: white;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 140px;
+
+  .weight-sample {
+    font-size: 1.25rem;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  .weight-name {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  code {
+    font-size: 0.6875rem;
+    color: #0446ED;
+    cursor: pointer;
+  }
+
+  .weight-value {
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.45);
+    font-family: 'Roboto Mono', monospace;
+  }
+}
+
+// ==========================================
+// SPACING
+// ==========================================
+.spacing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.spacing-item {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  .spacing-visual {
+    background: #0446ED;
+    border-radius: 2px;
+    min-width: 4px;
+    min-height: 4px;
+  }
+
+  .spacing-info {
+    text-align: center;
+
+    code {
+      display: block;
+      font-size: 0.75rem;
+      color: #0446ED;
+      cursor: pointer;
+      margin-bottom: 4px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .spacing-value {
+      font-size: 0.6875rem;
+      color: rgba(0, 0, 0, 0.54);
+      font-family: 'Roboto Mono', monospace;
+    }
+  }
+}
+
+// Border Radius
+.radius-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.radius-item {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  .radius-visual {
+    width: 64px;
+    height: 64px;
+    background: #0446ED;
+  }
+
+  .radius-info {
+    text-align: center;
+
+    .radius-name {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    code {
+      display: block;
+      font-size: 0.75rem;
+      color: #0446ED;
+      cursor: pointer;
+      margin-bottom: 2px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    span {
+      font-size: 0.6875rem;
+      color: rgba(0, 0, 0, 0.54);
+      font-family: 'Roboto Mono', monospace;
+    }
+  }
+}
+
+// ==========================================
+// ELEVATION
+// ==========================================
+.elevation-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.elevation-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  .elevation-visual {
+    width: 120px;
+    height: 80px;
+    background: white;
+    border-radius: 8px;
+  }
+
+  .elevation-info {
+    text-align: center;
+
+    strong {
+      display: block;
+      font-size: 0.875rem;
+      margin-bottom: 4px;
+    }
+
+    code {
+      font-size: 0.75rem;
+      color: #0446ED;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// ==========================================
+// COMPONENTS TAB
+// ==========================================
+.component-preview {
+  background: #f0f0f0;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+
+  &.card-preview {
+    background: #e8e8e8;
+  }
+
+  &.button-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &.form-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  &.table-preview {
+    padding: 0;
+    overflow: hidden;
+
+    table {
+      width: 100%;
+    }
+  }
+}
+
+.preview-toolbar {
+  .preview-title {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+.preview-card {
+  max-width: 400px;
+
+  .preview-card-header {
+    padding: 16px;
+    background: #f5f5f5;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+    .preview-card-title {
+      display: block;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .preview-card-subtitle {
+      font-size: 0.75rem;
+      color: rgba(0, 0, 0, 0.54);
+    }
+  }
+
+  mat-card-content {
+    padding: 16px !important;
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+.token-table {
+  h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+
+    th, td {
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    th {
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.6);
+      background: #f5f5f5;
+    }
+
+    td code {
+      color: #0446ED;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// ==========================================
+// CHARTS TAB
+// ==========================================
+.chart-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chart-color-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  .chart-color-swatch {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .chart-color-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+
+    strong {
+      min-width: 80px;
+    }
+
+    code {
+      font-size: 0.75rem;
+      color: #0446ED;
+      cursor: pointer;
+      min-width: 140px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .chart-color-hex {
+      font-size: 0.75rem;
+      color: rgba(0, 0, 0, 0.54);
+      font-family: 'Roboto Mono', monospace;
+      min-width: 70px;
+    }
+
+    .chart-color-usage {
+      font-size: 0.8125rem;
+      color: rgba(0, 0, 0, 0.45);
+    }
+  }
+}
+
+.code-block {
+  margin-bottom: 24px;
+
+  h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    margin: 0;
+
+    code {
+      font-family: 'Roboto Mono', monospace;
+    }
+  }
+}
+
+.state-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.state-color-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+
+  .state-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
+
+  .state-name {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  code {
+    font-size: 0.75rem;
+    color: #0446ED;
+  }
+}
+
+// ==========================================
+// TOKEN REFERENCE TAB
+// ==========================================
+.architecture-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  flex-wrap: wrap;
+
+  .tier {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 200px;
+    text-align: center;
+
+    h4 {
+      font-size: 0.9375rem;
+      margin: 0 0 8px 0;
+      color: #0446ED;
+    }
+
+    p {
+      font-size: 0.8125rem;
+      color: rgba(0, 0, 0, 0.54);
+      margin: 0 0 12px 0;
+    }
+
+    code {
+      display: block;
+      font-size: 0.6875rem;
+      color: rgba(0, 0, 0, 0.45);
+      margin-bottom: 12px;
+    }
+
+    .tier-example {
+      font-size: 0.75rem;
+      font-family: 'Roboto Mono', monospace;
+      background: white;
+      padding: 8px;
+      border-radius: 4px;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  .tier-arrow {
+    font-size: 1.5rem;
+    color: rgba(0, 0, 0, 0.25);
+  }
+}
+
+.file-tree {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 20px;
+  border-radius: 8px;
+
+  pre {
+    margin: 0;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+}
+
+.guidelines {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+
+  .guideline {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    h4 {
+      font-size: 1rem;
+      margin: 0 0 12px 0;
+
+      &:first-child {
+        color: #00C9A7;
+      }
+    }
+
+    &:last-child h4 {
+      color: #FF6B61;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.7);
+
+      li {
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+
+      code {
+        font-size: 0.8125rem;
+        color: #0446ED;
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+    }
+  }
+}
+
+// ==========================================
+// RESPONSIVE
+// ==========================================
+@media (max-width: 768px) {
+  .tab-content {
+    padding: 20px;
+  }
+
+  .architecture-diagram {
+    flex-direction: column;
+
+    .tier-arrow {
+      transform: rotate(90deg);
+    }
+  }
+
+  .font-size-item {
+    grid-template-columns: 60px 50px 1fr;
+
+    .size-value {
+      display: none;
+    }
+  }
+}

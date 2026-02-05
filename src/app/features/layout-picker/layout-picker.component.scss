@@ -11,13 +11,28 @@
   font-size: 2rem;
   font-weight: 500;
   color: #0446ED;
-  margin: 0 0 8px 0;
+  margin: 0 0 12px 0;
+}
+
+.tech-stack {
+  font-size: 0.8125rem;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0 0 24px 0;
+  letter-spacing: 0.3px;
+}
+
+.divider {
+  width: 100%;
+  max-width: 600px;
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin: 0 0 24px 0;
 }
 
 .picker-subtitle {
   font-size: 1rem;
   color: rgba(0, 0, 0, 0.6);
-  margin: 0 0 48px 0;
+  margin: 0 0 32px 0;
 }
 
 .layout-options {
@@ -106,7 +121,35 @@
   p {
     font-size: 0.875rem;
     color: rgba(0, 0, 0, 0.6);
-    margin: 0;
+    margin: 0 0 12px 0;
     line-height: 1.5;
+  }
+
+  .feature-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.54);
+    line-height: 1.6;
+
+    li {
+      margin-bottom: 2px;
+    }
+  }
+}
+
+.style-guide-link {
+  margin-top: 48px;
+  font-size: 0.875rem;
+  color: #0446ED;
+  text-decoration: none;
+  padding: 12px 24px;
+  border: 1px solid rgba(4, 70, 237, 0.3);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(4, 70, 237, 0.05);
+    border-color: #0446ED;
   }
 }
