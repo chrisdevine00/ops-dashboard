@@ -621,9 +621,73 @@ export class App implements OnInit, OnDestroy {
           symbol: 'diamond',
           data: alertMarkers,
           z: 3
+        },
+        // Midnight indicator line
+        {
+          name: 'Midnight',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const midnightX = api.coord([17, 0]); // 17 hours from 07:00 = midnight
+            const yTop = api.coord([0, ALERTS_Y_INDEX]);
+            const yBottom = api.coord([0, 0]);
+            const chartHeight = yBottom[1] - yTop[1] + api.size([0, 1])[1];
+
+            return {
+              type: 'group',
+              children: [
+                // Invisible hover area
+                {
+                  type: 'rect',
+                  shape: {
+                    x: midnightX[0] - 5,
+                    y: yTop[1] - api.size([0, 1])[1] / 2,
+                    width: 10,
+                    height: chartHeight
+                  },
+                  style: {
+                    fill: 'transparent'
+                  },
+                  z: 1
+                },
+                // Vertical solid line
+                {
+                  type: 'line',
+                  shape: {
+                    x1: midnightX[0],
+                    y1: yTop[1] - api.size([0, 1])[1] / 2,
+                    x2: midnightX[0],
+                    y2: yTop[1] - api.size([0, 1])[1] / 2 + chartHeight
+                  },
+                  style: {
+                    stroke: '#aaa',
+                    lineWidth: 1
+                  },
+                  z: 1
+                }
+              ]
+            };
+          },
+          data: [{ value: 0, nextDate: this.getNextDayFormatted() }],
+          tooltip: {
+            formatter: () => {
+              return `<strong>Date Change</strong><br/>${this.getNextDayFormatted()}`;
+            }
+          },
+          z: 1
         }
       ]
     };
+  }
+
+  private getNextDayFormatted(): string {
+    const nextDay = new Date(this.currentDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    return nextDay.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
   }
 
   private generateCharts(): void {
@@ -1044,6 +1108,59 @@ export class App implements OnInit, OnDestroy {
           symbolSize: 12,
           symbol: 'diamond',
           z: 3
+        },
+        // Midnight indicator line
+        {
+          name: 'Midnight',
+          type: 'custom',
+          renderItem: (params: any, api: any) => {
+            const midnightX = api.coord([17, 0]); // 17 hours from 07:00 = midnight
+            const yTop = api.coord([0, 2]);
+            const yBottom = api.coord([0, 0]);
+            const chartHeight = yBottom[1] - yTop[1] + 30;
+
+            return {
+              type: 'group',
+              children: [
+                // Invisible hover area
+                {
+                  type: 'rect',
+                  shape: {
+                    x: midnightX[0] - 5,
+                    y: yTop[1] - 15,
+                    width: 10,
+                    height: chartHeight
+                  },
+                  style: {
+                    fill: 'transparent'
+                  },
+                  z: 5
+                },
+                // Vertical solid line
+                {
+                  type: 'line',
+                  shape: {
+                    x1: midnightX[0],
+                    y1: yTop[1] - 15,
+                    x2: midnightX[0],
+                    y2: yTop[1] - 15 + chartHeight
+                  },
+                  style: {
+                    stroke: '#aaa',
+                    lineWidth: 1
+                  },
+                  z: 5
+                }
+              ]
+            };
+          },
+          data: [{ value: 0, nextDate: this.getNextDayFormatted() }],
+          tooltip: {
+            formatter: () => {
+              return `<strong>Date Change</strong><br/>${this.getNextDayFormatted()}`;
+            }
+          },
+          z: 1
         }
       ]
     };
