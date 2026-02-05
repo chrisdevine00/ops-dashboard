@@ -85,18 +85,24 @@
             </div>
           </div>
 
-          <!-- Secondary Palette -->
+          <!-- Secondary Palette with Mini-Ramps -->
           <div class="color-group">
-            <h3 class="group-title">{{ secondaryColors.title }}</h3>
-            <p class="group-description">{{ secondaryColors.description }}</p>
-            <div class="color-grid">
-              <div class="color-swatch" *ngFor="let color of secondaryColors.colors">
-                <div class="swatch" [style.background-color]="color.hex"></div>
-                <div class="swatch-info">
-                  <span class="swatch-name">{{ color.name }}</span>
-                  <code class="swatch-variable" (click)="copyToClipboard(color.variable)">{{ color.variable }}</code>
-                  <span class="swatch-hex">{{ color.hex }}</span>
-                  <span class="swatch-usage" *ngIf="color.usage">{{ color.usage }}</span>
+            <h3 class="group-title">Secondary Palette</h3>
+            <p class="group-description">Extended brand colors with dark/base/light variants for data visualization and semantic states.</p>
+            <div class="secondary-ramps">
+              <div class="secondary-ramp-item" *ngFor="let ramp of secondaryRamps">
+                <div class="ramp-header">
+                  <span class="ramp-name">{{ ramp.name }}</span>
+                  <span class="ramp-usage">{{ ramp.usage }}</span>
+                </div>
+                <div class="mini-ramp">
+                  <div class="mini-swatch" *ngFor="let color of ramp.colors"
+                       [style.background-color]="color.hex"
+                       [title]="color.variable + ': ' + color.hex"
+                       (click)="copyToClipboard(color.variable)">
+                    <span class="mini-label">{{ color.name }}</span>
+                    <span class="mini-hex">{{ color.hex }}</span>
+                  </div>
                 </div>
               </div>
             </div>

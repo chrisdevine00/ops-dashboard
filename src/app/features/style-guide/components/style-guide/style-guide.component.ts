@@ -109,6 +109,55 @@ export class StyleGuideComponent {
     ]
   };
 
+  // Secondary color mini-ramps (dark, base, light)
+  secondaryRamps = [
+    {
+      name: 'Infrared',
+      usage: 'Error states',
+      colors: [
+        { name: 'Dark', variable: '$bd-infrared-dark', hex: '#EF6860' },
+        { name: 'Base', variable: '$bd-infrared', hex: '#FF6B61' },
+        { name: 'Light', variable: '$bd-infrared-light', hex: '#FF8F87' },
+      ]
+    },
+    {
+      name: 'Aurora',
+      usage: 'Warnings',
+      colors: [
+        { name: 'Dark', variable: '$bd-aurora-dark', hex: '#E65C23' },
+        { name: 'Base', variable: '$bd-aurora', hex: '#FA7C23' },
+        { name: 'Light', variable: '$bd-aurora-light', hex: '#FFB84D' },
+      ]
+    },
+    {
+      name: 'Eclipse',
+      usage: 'Caution',
+      colors: [
+        { name: 'Dark', variable: '$bd-eclipse-dark', hex: '#F5A500' },
+        { name: 'Base', variable: '$bd-eclipse', hex: '#FFC300' },
+        { name: 'Light', variable: '$bd-eclipse-light', hex: '#FFD966' },
+      ]
+    },
+    {
+      name: 'Comet',
+      usage: 'Info',
+      colors: [
+        { name: 'Dark', variable: '$bd-comet-dark', hex: '#0099CC' },
+        { name: 'Base', variable: '$bd-comet', hex: '#2995C5' },
+        { name: 'Light', variable: '$bd-comet-light', hex: '#5BB3DB' },
+      ]
+    },
+    {
+      name: 'Nebula',
+      usage: 'Success',
+      colors: [
+        { name: 'Dark', variable: '$bd-nebula-dark', hex: '#00A88F' },
+        { name: 'Base', variable: '$bd-nebula', hex: '#00C9A7' },
+        { name: 'Light', variable: '$bd-nebula-light', hex: '#4DD9C0' },
+      ]
+    },
+  ];
+
   secondaryColors: ColorGroup = {
     title: 'Secondary Palette',
     description: 'Extended brand colors for data visualization and accents',
