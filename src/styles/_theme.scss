@@ -6,7 +6,28 @@
 @use '@angular/material' as mat;
 @use './tokens/bd-primitives' as bd;
 
+// ============================================
+// Typography Configuration
+// Uses Inter font globally for all Material components
+// ============================================
+$bd-typography: mat.m2-define-typography-config(
+  $font-family: 'Inter, Helvetica Neue, sans-serif',
+  $headline-1: mat.m2-define-typography-level(96px, 96px, 300, $letter-spacing: -0.015em),
+  $headline-2: mat.m2-define-typography-level(60px, 60px, 300, $letter-spacing: -0.005em),
+  $headline-3: mat.m2-define-typography-level(48px, 50px, 400),
+  $headline-4: mat.m2-define-typography-level(34px, 40px, 400, $letter-spacing: 0.0025em),
+  $headline-5: mat.m2-define-typography-level(24px, 32px, 400),
+  $headline-6: mat.m2-define-typography-level(20px, 32px, 500, $letter-spacing: 0.0015em),
+  $subtitle-1: mat.m2-define-typography-level(16px, 28px, 400, $letter-spacing: 0.0015em),
+  $subtitle-2: mat.m2-define-typography-level(14px, 22px, 500, $letter-spacing: 0.001em),
+  $body-1: mat.m2-define-typography-level(16px, 24px, 400, $letter-spacing: 0.005em),
+  $body-2: mat.m2-define-typography-level(14px, 20px, 400, $letter-spacing: 0.0025em),
+  $caption: mat.m2-define-typography-level(12px, 20px, 400, $letter-spacing: 0.004em),
+  $button: mat.m2-define-typography-level(14px, 36px, 500, $letter-spacing: 0.0125em),
+);
+
 @include mat.core();
+@include mat.typography-hierarchy($bd-typography);
 
 // ============================================
 // BD Custom Material Palettes
@@ -105,7 +126,8 @@ $app-theme: mat.m2-define-light-theme((
     primary: $app-primary,
     accent: $app-accent,
     warn: $app-warn,
-  )
+  ),
+  typography: $bd-typography,
 ));
 
 // Include theme styles for all components

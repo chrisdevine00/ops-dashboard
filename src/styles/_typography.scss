@@ -2,9 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap');
 
-// Typography Variables
+// ============================================
+// Global Font Configuration
+// Change these variables to update fonts globally
+// ============================================
 $font-family-primary: 'Inter', 'Helvetica Neue', sans-serif;
 $font-family-monospace: 'Roboto Mono', 'Courier New', monospace;
+
+// CSS Custom Properties for runtime access
+:root {
+  --font-family-primary: #{$font-family-primary};
+  --font-family-monospace: #{$font-family-monospace};
+}
 
 // Font Sizes
 $font-size-xs: 0.75rem;    // 12px

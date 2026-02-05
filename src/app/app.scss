@@ -3,6 +3,11 @@
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0 8px;
+
+  .home-button {
+    color: inherit;
+  }
 
   .title {
     margin-left: 16px;
@@ -14,10 +19,41 @@
     flex: 1 1 auto;
   }
 
+  .time-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 24px;
+    font-size: 0.7rem;
+    line-height: 1.4;
+
+    .time-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .time-label {
+      opacity: 0.7;
+    }
+
+    .time-value {
+      font-family: monospace;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  .refresh-section {
+    display: flex;
+    align-items: center;
+  }
+
   .refresh-info {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     opacity: 0.85;
-    margin-right: 8px;
+    margin-right: 4px;
+    max-width: 180px;
+    text-align: right;
+    line-height: 1.3;
   }
 }
 

@@ -52,6 +52,18 @@ interface InstrumentWorkflow {
   styleUrl: './app.scss'
 })
 export class App implements OnInit, OnDestroy {
+  // Facility info
+  facilityName = 'Main Laboratory';
+  serialNumber = 'SN20240847';
+
+  // Time displays
+  siteTime = '';
+  localTime = '';
+  private readonly siteTimezone = 'Europe/London';  // UTC+0/+1
+  private readonly siteTimezoneOffset = '+1:00';
+  private readonly localTimezoneOffset = '-4:00';
+  private clockTimer: any;
+
   // Metrics
   activeWorkflows = 0;
   completedToday = 0;
@@ -82,9 +94,46 @@ export class App implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateFormattedDate();
+    this.updateClocks();
+    this.startClockTimer();
     this.generateCharts();
     this.updateMetrics();
     this.startRefreshTimer();
+  }
+
+  private startClockTimer(): void {
+    this.clockTimer = setInterval(() => {
+      this.updateClocks();
+    }, 1000);
+  }
+
+  private updateClocks(): void {
+    const now = new Date();
+
+    // Site time (e.g., Europe/London)
+    const siteTimeStr = now.toLocaleString('en-GB', {
+      timeZone: this.siteTimezone,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour12: false
+    });
+    this.siteTime = `${siteTimeStr} (UTC ${this.siteTimezoneOffset})`;
+
+    // Local time
+    const localTimeStr = now.toLocaleString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour12: false
+    });
+    this.localTime = `${localTimeStr} (UTC ${this.localTimezoneOffset})`;
   }
 
   private updateFormattedDate(): void {
@@ -1056,11 +1105,9 @@ export class App implements OnInit, OnDestroy {
   }
 
   private updateRefreshText(): void {
-    const now = new Date();
-    const refreshTime = new Date(now.getTime() + this.refreshCountdown * 1000);
-    const hours = refreshTime.getHours().toString().padStart(2, '0');
-    const minutes = refreshTime.getMinutes().toString().padStart(2, '0');
-    this.refreshText = `Next refresh at ${hours}:${minutes}`;
+    const minutes = Math.floor(this.refreshCountdown / 60);
+    const seconds = this.refreshCountdown % 60;
+    this.refreshText = `This page will refresh in ${minutes} minute${minutes !== 1 ? 's' : ''}, ${seconds} second${seconds !== 1 ? 's' : ''}.`;
   }
 
   refreshNow(): void {
@@ -1074,6 +1121,9 @@ export class App implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer);
+    }
+    if (this.clockTimer) {
+      clearInterval(this.clockTimer);
     }
     this.destroy$.next();
     this.destroy$.complete();

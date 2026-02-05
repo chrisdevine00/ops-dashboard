@@ -1,11 +1,25 @@
 <mat-toolbar color="primary" class="toolbar">
-  <mat-icon>dashboard</mat-icon>
-  <span class="title">Operations Dashboard</span>
-  <span class="spacer"></span>
-  <span class="refresh-info">{{ refreshText }}</span>
-  <button mat-icon-button (click)="refreshNow()" [title]="'Refresh now'">
-    <mat-icon>refresh</mat-icon>
+  <button mat-icon-button class="home-button" title="Home">
+    <mat-icon>home</mat-icon>
   </button>
+  <span class="title">{{ facilityName }} | {{ serialNumber }}</span>
+  <span class="spacer"></span>
+  <div class="time-display">
+    <div class="time-row">
+      <span class="time-label">Site Time:</span>
+      <span class="time-value">{{ siteTime }}</span>
+    </div>
+    <div class="time-row">
+      <span class="time-label">Local Time:</span>
+      <span class="time-value">{{ localTime }}</span>
+    </div>
+  </div>
+  <div class="refresh-section">
+    <span class="refresh-info">{{ refreshText }}</span>
+    <button mat-icon-button (click)="refreshNow()" [title]="'Refresh now'">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
 </mat-toolbar>
 
 <div class="container">
