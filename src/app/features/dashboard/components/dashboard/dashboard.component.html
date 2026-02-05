@@ -1,0 +1,107 @@
+<!-- Header -->
+<mat-toolbar color="primary" class="toolbar">
+  <!-- Home -->
+  <button mat-icon-button class="home-button" title="Home" (click)="goHome()">
+    <lucide-icon name="home" [size]="20"></lucide-icon>
+  </button>
+
+  <div class="header-divider"></div>
+
+  <!-- Title -->
+  <span class="title">{{ facilityName }} | {{ serialNumber }}</span>
+
+  <div class="header-divider"></div>
+
+  <!-- Date Navigation -->
+  <div class="date-navigation">
+    <button mat-icon-button (click)="prevDay()" class="nav-button">
+      <lucide-icon name="chevron-left" [size]="20"></lucide-icon>
+    </button>
+    <div class="date-picker-wrapper">
+      <div class="current-date" (click)="picker.open()">
+        {{ formattedDate }}
+        <lucide-icon name="calendar" [size]="20" [strokeWidth]="2.5" class="calendar-icon"></lucide-icon>
+      </div>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [value]="currentDate"
+        [max]="today"
+        (dateChange)="onDateChange($event)"
+        class="hidden-date-input"
+      >
+      <mat-datepicker #picker></mat-datepicker>
+    </div>
+    <button mat-icon-button (click)="nextDay()" class="nav-button" [disabled]="isToday">
+      <lucide-icon name="chevron-right" [size]="20"></lucide-icon>
+    </button>
+    <button mat-stroked-button (click)="goToToday()" class="today-button" [disabled]="isToday">
+      Today
+    </button>
+  </div>
+
+  <span class="spacer"></span>
+
+  <div class="header-divider"></div>
+
+  <!-- Site Time -->
+  <div class="time-block">
+    <span class="time-label">Site</span>
+    <span class="time-value">{{ siteTimeShort }}</span>
+  </div>
+
+  <div class="header-divider"></div>
+
+  <!-- Local Time -->
+  <div class="time-block">
+    <span class="time-label">Local</span>
+    <span class="time-value">{{ localTimeShort }}</span>
+  </div>
+
+  <div class="header-divider"></div>
+
+  <!-- Refresh Time -->
+  <div class="time-block">
+    <span class="time-label">Refresh</span>
+    <span class="time-value">{{ refreshTextShort }}</span>
+  </div>
+
+  <!-- Refresh Button -->
+  <button mat-icon-button (click)="refreshNow()" [title]="'Refresh now'" class="refresh-button">
+    <lucide-icon name="refresh-cw" [size]="14"></lucide-icon>
+  </button>
+</mat-toolbar>
+
+<div class="container">
+
+  <!-- Gantt Charts -->
+  <mat-card class="chart-card">
+    <div class="chart-header">
+      <span class="chart-name">Left GX</span>
+      <span class="chart-serial">{{ leftGxSerial }}</span>
+    </div>
+    <mat-card-content>
+      <div echarts [options]="leftGxChartOptions" class="gantt-chart"></div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="chart-card">
+    <div class="chart-header">
+      <span class="chart-name">Right MX</span>
+      <span class="chart-serial">{{ rightMxSerial }}</span>
+    </div>
+    <mat-card-content>
+      <div echarts [options]="rightMxChartOptions" class="gantt-chart"></div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="chart-card px-card">
+    <div class="chart-header">
+      <span class="chart-name">PX</span>
+      <span class="chart-serial">{{ serialNumber }}</span>
+    </div>
+    <mat-card-content>
+      <div echarts [options]="pxChartOptions" class="state-chart"></div>
+    </mat-card-content>
+  </mat-card>
+</div>

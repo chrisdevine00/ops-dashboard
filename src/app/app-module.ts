@@ -3,23 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 
-// Material imports
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-
-// Lucide Icons
-import { LucideAngularModule, Home, RefreshCw, ChevronLeft, ChevronRight, Calendar } from 'lucide-angular';
-
-// ECharts
+// ECharts (configured at root for lazy-loaded modules)
 import { NgxEchartsModule } from 'ngx-echarts';
 
 import { AppRoutingModule } from './app-routing-module';
@@ -33,21 +17,7 @@ import { App } from './app';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    // Material Modules
-    MatToolbarModule,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    MatGridListModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatInputModule,
-    MatFormFieldModule,
-    // Lucide Icons
-    LucideAngularModule.pick({ Home, RefreshCw, ChevronLeft, ChevronRight, Calendar }),
-    // ECharts Module
+    // ECharts Module (root config for lazy-loaded feature modules)
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     })
