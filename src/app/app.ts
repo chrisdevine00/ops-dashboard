@@ -291,7 +291,7 @@ export class App implements OnInit, OnDestroy {
 
     // Y-axis labels: workflow lanes + gap + Alerts & Errors at top
     const laneLabels = customLabels || Array.from({ length: laneCount }, (_, i) => `Lane ${i + 1}`);
-    const yAxisLabels = [...laneLabels, '', 'Alerts & Errors'];
+    const yAxisLabels = [...laneLabels, 'Alerts & Errors'];
     const ALERTS_Y_INDEX = yAxisLabels.length - 1;
 
     // Get instrument maintenance periods
@@ -576,7 +576,7 @@ export class App implements OnInit, OnDestroy {
           name: 'Divider',
           type: 'custom',
           renderItem: (params: any, api: any) => {
-            const y = api.coord([0, laneCount + 0.5]);
+            const y = api.coord([0, laneCount - 0.5]);
             const xStart = api.coord([0, 0]);
             const xEnd = api.coord([24, 0]);
 
