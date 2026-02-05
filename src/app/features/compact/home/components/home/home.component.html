@@ -36,7 +36,12 @@
   </div>
 </div>
 
-<!-- Layout Toggle FAB -->
-<button mat-fab class="layout-fab" title="Switch to Full Layout" routerLink="/full/home">
-  <lucide-icon name="maximize-2" [size]="24"></lucide-icon>
-</button>
+<!-- Layout Toggle FABs -->
+<div class="fab-container">
+  <button mat-fab class="picker-fab" title="Back to Layout Picker" routerLink="/">
+    <lucide-icon name="layout-grid" [size]="24"></lucide-icon>
+  </button>
+  <button mat-fab class="layout-fab" title="Switch to Full Layout" routerLink="/full/home">
+    <lucide-icon name="maximize-2" [size]="24"></lucide-icon>
+  </button>
+</div>

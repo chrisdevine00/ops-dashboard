@@ -209,11 +209,19 @@
   }
 }
 
-.layout-fab {
+.fab-container {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.picker-fab,
+.layout-fab {
   background-color: rgba(0, 0, 0, 0.6);
   color: white;
 

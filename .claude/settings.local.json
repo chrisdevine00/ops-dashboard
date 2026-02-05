@@ -5,7 +5,22 @@
       "Bash(gh auth:*)",
       "Bash(brew install:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(tree:*)",
+      "Bash(npm run build:*)",
+      "Bash(lsof:*)",
+      "Bash(git push)",
+      "Bash(gh repo sync:*)",
+      "Bash(git push:*)",
+      "Bash(npm install:*)",
+      "Bash(xargs:*)",
+      "Bash(curl:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git merge:*)",
+      "Bash(npm run start:*)"
     ]
   }
 }
