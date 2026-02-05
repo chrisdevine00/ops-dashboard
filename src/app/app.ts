@@ -328,7 +328,7 @@ export class App implements OnInit, OnDestroy {
           position: 'insideLeft',
           formatter: workflow.acronym,
           color: '#FFFFFF',
-          fontSize: 11,
+          fontSize: 9,
           fontWeight: 'bold'
         },
         workflowData: workflow // Store for tooltip
@@ -416,24 +416,24 @@ export class App implements OnInit, OnDestroy {
         textStyle: { color: '#FFFFFF' }
       },
       grid: {
-        left: 120,
-        right: '3%',
-        top: '5%',
-        bottom: '10%',
+        left: 80,
+        right: '2%',
+        top: 8,
+        bottom: 30,
         containLabel: false
       },
       xAxis: {
         type: 'value',
         min: 0,
         max: 24,
-        interval: 1,
+        interval: 2,
         axisLabel: {
           formatter: (value: number) => {
             const hour = (7 + value) % 24;
             return `${hour.toString().padStart(2, '0')}:00`;
           },
-          rotate: 45,
-          fontSize: 10
+          rotate: 0,
+          fontSize: 8
         },
         splitLine: {
           show: true,
@@ -450,7 +450,7 @@ export class App implements OnInit, OnDestroy {
         type: 'category',
         data: yAxisLabels,
         axisLabel: {
-          fontSize: 10,
+          fontSize: 8,
           color: '#060A3D'
         },
         axisLine: {
@@ -993,24 +993,24 @@ export class App implements OnInit, OnDestroy {
         extraCssText: 'max-height: 400px; overflow-y: auto;'
       },
       grid: {
-        left: 120,
-        right: '3%',
-        top: '10%',
-        bottom: '20%',
+        left: 80,
+        right: '2%',
+        top: 4,
+        bottom: 20,
         containLabel: false
       },
       xAxis: {
         type: 'value',
         min: 0,
         max: 24, // 24 hours from 18:00 to 18:00 next day
-        interval: 1,
+        interval: 2,
         axisLabel: {
           formatter: (value: number) => {
             const hour = (7 + value) % 24;
             return `${hour.toString().padStart(2, '0')}:00`;
           },
-          fontSize: 9,
-          rotate: 45
+          fontSize: 8,
+          rotate: 0
         },
         splitLine: {
           show: true,
@@ -1027,7 +1027,7 @@ export class App implements OnInit, OnDestroy {
         type: 'category',
         data: ['Device State', '', 'Alerts & Errors'],
         axisLabel: {
-          fontSize: 11,
+          fontSize: 8,
           color: '#060A3D',
           fontWeight: 500
         },
