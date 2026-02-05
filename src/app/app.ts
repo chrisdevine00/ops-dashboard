@@ -67,6 +67,12 @@ export class App implements OnInit, OnDestroy {
     return this.currentDate.toDateString() === this.today.toDateString();
   }
 
+  // Auto-refresh
+  private readonly REFRESH_INTERVAL = 10 * 60; // 10 minutes in seconds
+  private refreshCountdown = this.REFRESH_INTERVAL;
+  refreshText = '';
+  private refreshTimer: any;
+
   // Chart options
   leftGxChartOptions: EChartsOption = {};
   rightMxChartOptions: EChartsOption = {};
@@ -78,6 +84,7 @@ export class App implements OnInit, OnDestroy {
     this.updateFormattedDate();
     this.generateCharts();
     this.updateMetrics();
+    this.startRefreshTimer();
   }
 
   private updateFormattedDate(): void {
@@ -1034,7 +1041,40 @@ export class App implements OnInit, OnDestroy {
     this.alertsGenerated = Math.floor(Math.random() * 5) + 1;
   }
 
+  private startRefreshTimer(): void {
+    this.refreshCountdown = this.REFRESH_INTERVAL;
+    this.updateRefreshText();
+
+    this.refreshTimer = setInterval(() => {
+      this.refreshCountdown--;
+      this.updateRefreshText();
+
+      if (this.refreshCountdown <= 0) {
+        this.refreshNow();
+      }
+    }, 1000);
+  }
+
+  private updateRefreshText(): void {
+    const now = new Date();
+    const refreshTime = new Date(now.getTime() + this.refreshCountdown * 1000);
+    const hours = refreshTime.getHours().toString().padStart(2, '0');
+    const minutes = refreshTime.getMinutes().toString().padStart(2, '0');
+    this.refreshText = `Next refresh at ${hours}:${minutes}`;
+  }
+
+  refreshNow(): void {
+    // Reset countdown and refresh data
+    this.refreshCountdown = this.REFRESH_INTERVAL;
+    this.updateRefreshText();
+    this.generateCharts();
+    this.updateMetrics();
+  }
+
   ngOnDestroy(): void {
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer);
+    }
     this.destroy$.next();
     this.destroy$.complete();
   }

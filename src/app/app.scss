@@ -9,6 +9,16 @@
     font-size: 1.125rem;
     font-weight: 500;
   }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .refresh-info {
+    font-size: 0.75rem;
+    opacity: 0.85;
+    margin-right: 8px;
+  }
 }
 
 .container {

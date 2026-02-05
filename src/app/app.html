@@ -2,7 +2,8 @@
   <mat-icon>dashboard</mat-icon>
   <span class="title">Operations Dashboard</span>
   <span class="spacer"></span>
-  <button mat-icon-button>
+  <span class="refresh-info">{{ refreshText }}</span>
+  <button mat-icon-button (click)="refreshNow()" [title]="'Refresh now'">
     <mat-icon>refresh</mat-icon>
   </button>
 </mat-toolbar>
