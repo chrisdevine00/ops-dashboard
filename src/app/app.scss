@@ -131,17 +131,19 @@
   margin-bottom: 6px;
   transition: box-shadow 0.2s ease;
   overflow: hidden;
-  flex: 1;
   display: flex;
   flex-direction: column;
+  // Use flex-grow proportional to row count for consistent lane heights
+  // Gantt charts: 10 rows (9 lanes + alerts)
+  // PX chart: 3 rows
+  flex: 10;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   &.px-card {
-    flex: 0 0 auto;
-    max-height: 100px;
+    flex: 3;
   }
 
   .chart-header {
@@ -199,7 +201,8 @@
 
   .state-chart {
     width: 100%;
-    height: 70px;
+    flex: 1;
+    min-height: 0;
   }
 }
 
