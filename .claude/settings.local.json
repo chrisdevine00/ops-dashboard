@@ -21,7 +21,26 @@
       "Bash(git pull:*)",
       "Bash(git merge:*)",
       "Bash(npm run start:*)",
-      "Bash(npx ng build:*)"
+      "Bash(npx ng build:*)",
+      "Bash(npm start)",
+      "Bash(git config:*)",
+      "WebFetch(domain:www.marathonthegame.com)",
+      "WebFetch(domain:ricks-apps.com)",
+      "Bash(comm:*)",
+      "Bash(python3:*)",
+      "Bash(open:*)",
+      "Bash(pip3 install:*)",
+      "Bash(node -e:*)",
+      "Bash(npx ng serve:*)",
+      "Bash(git -C /Users/cdevine/Developer/ops-dashboard status)",
+      "Bash(git -C /Users/cdevine/Developer/ops-dashboard diff)",
+      "Bash(git -C /Users/cdevine/Developer/ops-dashboard log --oneline -5)",
+      "Bash(git -C /Users/cdevine/Developer/ops-dashboard add src/app/features/shared/footer/footer.component.ts src/app/features/shared/footer/footer.component.html src/app/features/shared/footer/footer.component.scss src/app/features/compact/dashboard/components/dashboard/dashboard.component.html src/app/features/compact/dashboard/components/dashboard/dashboard.component.scss src/app/features/compact/dashboard/dashboard.module.ts src/app/features/compact/home/components/home/home.component.html src/app/features/compact/home/home.module.ts src/app/features/full/dashboard/components/dashboard/dashboard.component.html src/app/features/full/dashboard/components/dashboard/dashboard.component.scss src/app/features/full/dashboard/dashboard.module.ts src/app/features/full/home/components/home/home.component.html src/app/features/full/home/home.module.ts)",
+      "Bash(git -C /Users/cdevine/Developer/ops-dashboard commit -m \"$\\(cat <<''EOF''\nAdd minimal single-line footer to all pages\n\nShared standalone FooterComponent displays environment badge, software\nversion, and BD copyright across compact and full layouts. Compact\ndashboard uses flex column host layout to fit the 20px footer without\nscrollbars; full dashboard adjusts min-height calc for the 24px variant.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/cdevine/Developer/ops-dashboard push)",
+      "Bash(git reset:*)",
+      "Bash(find:*)",
+      "Bash(git -C /Users/cdevine/Developer/ops-dashboard log --oneline)"
     ]
   }
 }
