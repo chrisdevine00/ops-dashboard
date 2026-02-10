@@ -20,6 +20,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 
 // Components
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent }
@@ -44,7 +45,9 @@ const routes: Routes = [
     // Lucide
     LucideAngularModule.pick({ Home, RefreshCw, ChevronLeft, ChevronRight, Calendar, Minimize2, LayoutGrid }),
     // ECharts
-    NgxEchartsModule.forChild()
+    NgxEchartsModule.forChild(),
+    // Shared
+    FooterComponent
   ]
 })
 export class FullDashboardModule { }

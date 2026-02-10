@@ -75,37 +75,21 @@
 
 <div class="container">
 
-  <!-- Gantt Charts -->
-  <mat-card class="chart-card">
+  <!-- Swim Lane Charts -->
+  <mat-card *ngFor="let lane of laneCharts"
+            class="chart-card"
+            [class.px-card]="lane.config.position === 'px'">
     <div class="chart-header">
-      <span class="chart-name">Left GX</span>
-      <span class="chart-serial">{{ leftGxSerial }}</span>
+      <span class="chart-name">{{ lane.label }}</span>
+      <span class="chart-serial">{{ lane.serial }}</span>
     </div>
     <mat-card-content>
-      <div echarts [options]="leftGxChartOptions" class="gantt-chart"></div>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card class="chart-card">
-    <div class="chart-header">
-      <span class="chart-name">Right MX</span>
-      <span class="chart-serial">{{ rightMxSerial }}</span>
-    </div>
-    <mat-card-content>
-      <div echarts [options]="rightMxChartOptions" class="gantt-chart"></div>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card class="chart-card px-card">
-    <div class="chart-header">
-      <span class="chart-name">PX</span>
-      <span class="chart-serial">{{ serialNumber }}</span>
-    </div>
-    <mat-card-content>
-      <div echarts [options]="pxChartOptions" class="state-chart"></div>
+      <div echarts [options]="lane.options" class="gantt-chart"></div>
     </mat-card-content>
   </mat-card>
 </div>
+
+<app-footer variant="full"></app-footer>
 
 <!-- Layout Toggle FABs -->
 <div class="fab-container">

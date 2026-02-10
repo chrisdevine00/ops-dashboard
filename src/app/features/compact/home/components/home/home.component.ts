@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { SystemsService } from '../../../../../core/services/systems.service';
-import { SystemsByRegion } from '../../../../../core/models/system.model';
+import { System } from '../../../../../core/models/system.model';
 
 @Component({
   selector: 'app-home',
@@ -12,8 +14,12 @@ import { SystemsByRegion } from '../../../../../core/models/system.model';
   standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  systemsByRegion: SystemsByRegion[] = [];
+  allCount = 0;
+  displayedColumns = ['status', 'customerName', 'region', 'serialNumber', 'lastEventTime', 'lastAlertTime'];
+  dataSource = new MatTableDataSource<System>([]);
   searchControl = new FormControl('');
+
+  @ViewChild(MatSort) sort!: MatSort;
 
   private destroy$ = new Subject<void>();
 
@@ -21,7 +27,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Initial load
-    this.loadSystems();
+    this.systemsService.getSystemsFlat()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(systems => {
+        this.allCount = systems.length;
+        this.dataSource.data = systems;
+      });
 
     // Set up search with debounce
     this.searchControl.valueChanges.pipe(
@@ -29,24 +40,32 @@ export class HomeComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroy$)
     ).subscribe(query => {
-      this.searchSystems(query || '');
+      this.systemsService.searchSystems(query || '')
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(systems => {
+          this.dataSource.data = systems;
+        });
     });
   }
 
-  private loadSystems(): void {
-    this.systemsService.getSystemsByRegion()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(systems => {
-        this.systemsByRegion = systems;
-      });
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
   }
 
-  private searchSystems(query: string): void {
-    this.systemsService.searchSystems(query)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(systems => {
-        this.systemsByRegion = systems;
-      });
+  getStatus(system: System): 'ok' | 'warning' | 'critical' {
+    if (!system.lastAlertTime) return 'ok';
+    const hoursAgo = (Date.now() - system.lastAlertTime.getTime()) / (1000 * 60 * 60);
+    if (hoursAgo <= 4) return 'critical';
+    if (hoursAgo <= 24) return 'warning';
+    return 'ok';
+  }
+
+  formatDateTime(date: Date | null): string {
+    if (!date) return '\u2014';
+    return date.toLocaleString('en-US', {
+      month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: false
+    });
   }
 
   ngOnDestroy(): void {

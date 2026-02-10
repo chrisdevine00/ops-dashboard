@@ -14,11 +14,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 // Lucide Icons
-import { LucideAngularModule, Search, Home, Maximize2, LayoutGrid } from 'lucide-angular';
+import { LucideAngularModule, Search, Maximize2, LayoutGrid } from 'lucide-angular';
 
 // Components
 import { HomeComponent } from './components/home/home.component';
-import { RegionTableComponent } from './components/region-table/region-table.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent }
@@ -26,8 +26,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    HomeComponent,
-    RegionTableComponent
+    HomeComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +42,9 @@ const routes: Routes = [
     MatInputModule,
     MatFormFieldModule,
     // Lucide
-    LucideAngularModule.pick({ Search, Home, Maximize2, LayoutGrid })
+    LucideAngularModule.pick({ Search, Maximize2, LayoutGrid }),
+    // Shared
+    FooterComponent
   ]
 })
 export class HomeModule { }

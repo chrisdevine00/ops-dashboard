@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+.app-footer {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 16px;
+  background-color: #F7F6F6;
+  border-top: 1px solid #E8E5E5;
+  font-size: 0.625rem;
+  color: #B1A8A8;
+  gap: 8px;
+  flex-shrink: 0;
+
+  &.compact {
+    height: 20px;
+    padding: 0 12px;
+    font-size: 0.5625rem;
+  }
+
+  .env-badge {
+    font-size: 0.5625rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background-color: #F59E0B;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+
+  &.compact .env-badge {
+    font-size: 0.5rem;
+    padding: 0 5px;
+  }
+
+  .version {
+    font-family: 'Roboto Mono', monospace;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .copyright {
+    white-space: nowrap;
+  }
+}

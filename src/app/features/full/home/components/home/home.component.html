@@ -1,11 +1,4 @@
 <mat-toolbar color="primary" class="toolbar">
-  <!-- Home -->
-  <button mat-icon-button class="home-button" title="Home" routerLink="/full/home">
-    <lucide-icon name="home" [size]="20"></lucide-icon>
-  </button>
-
-  <div class="header-divider"></div>
-
   <!-- Title -->
   <span class="title">Operations Dashboard</span>
 
@@ -16,25 +9,77 @@
     <mat-form-field appearance="outline" class="search-field">
       <input matInput
              [formControl]="searchControl"
-             placeholder="Search by serial number...">
+             placeholder="Search systems...">
       <lucide-icon matSuffix name="search" [size]="16" class="search-icon"></lucide-icon>
     </mat-form-field>
   </div>
+
+  <span class="system-count">{{ dataSource.data.length }} of {{ allCount }} systems</span>
 
   <span class="spacer"></span>
 </mat-toolbar>
 
 <div class="container">
-  <app-region-table
-    *ngFor="let group of systemsByRegion"
-    [region]="group.region"
-    [systems]="group.systems">
-  </app-region-table>
+  <mat-card class="systems-card">
+    <table mat-table [dataSource]="dataSource" matSort class="systems-table">
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let system">
+          <span class="status-dot" [ngClass]="'status-' + getStatus(system)"></span>
+        </td>
+      </ng-container>
 
-  <div *ngIf="systemsByRegion.length === 0" class="no-results">
+      <!-- Customer Name -->
+      <ng-container matColumnDef="customerName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+        <td mat-cell *matCellDef="let system">{{ system.customerName }}</td>
+      </ng-container>
+
+      <!-- Region -->
+      <ng-container matColumnDef="region">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Region</th>
+        <td mat-cell *matCellDef="let system">{{ system.region }}</td>
+      </ng-container>
+
+      <!-- Serial Number -->
+      <ng-container matColumnDef="serialNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Serial Number</th>
+        <td mat-cell *matCellDef="let system">
+          <a [routerLink]="['/full/system', system.serialNumber]" class="serial-link">
+            {{ system.serialNumber }}
+          </a>
+        </td>
+      </ng-container>
+
+      <!-- Last Event -->
+      <ng-container matColumnDef="lastEventTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Event</th>
+        <td mat-cell *matCellDef="let system">{{ formatDateTime(system.lastEventTime) }}</td>
+      </ng-container>
+
+      <!-- Last Alert -->
+      <ng-container matColumnDef="lastAlertTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Alert</th>
+        <td mat-cell *matCellDef="let system" [class.no-alert]="!system.lastAlertTime">
+          {{ formatDateTime(system.lastAlertTime) }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          [routerLink]="['/full/system', row.serialNumber]"
+          class="clickable-row">
+      </tr>
+    </table>
+  </mat-card>
+
+  <div *ngIf="dataSource.data.length === 0" class="no-results">
     No systems found matching your search.
   </div>
 </div>
+
+<app-footer variant="full"></app-footer>
 
 <!-- Layout Toggle FABs -->
 <div class="fab-container">
